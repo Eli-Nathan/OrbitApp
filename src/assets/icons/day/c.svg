@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>day/c</title>
+    <desc>Created with Sketch.</desc>
+    <g id="day/c" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Weather-icons/Sunny" transform="translate(3.000000, 6.000000)">
+            <g id="Sunny" transform="translate(14.716981, 11.985366)">
+                <g id="icon">
+                    <g id="sun-/-big">
+                        <ellipse id="Oval-1-Copy-2" stroke-opacity="0.2" stroke="#FFF308" stroke-width="2.75943396" cx="82.7830189" cy="82.9756098" rx="81.4033019" ry="81.5958928"></ellipse>
+                        <ellipse id="Oval-1-Copy" stroke-opacity="0.6" stroke="#FFF308" stroke-width="3.67924528" cx="82.3231132" cy="82.5146341" rx="71.2853774" ry="71.4554993"></ellipse>
+                        <ellipse id="Oval-1" fill="#FFEC65" fill-rule="evenodd" cx="82.3231132" cy="82.5146341" rx="62.0872642" ry="62.2317073"></ellipse>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
