@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, {G, Path} from 'react-native-svg';
 
-function SvgT(props) {
+function SvgT(props: any) {
     return (
         <Svg width={200} height={200} {...props}>
             <G fill="none" fillRule="evenodd">

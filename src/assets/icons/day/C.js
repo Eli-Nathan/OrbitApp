@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, {G, Ellipse} from 'react-native-svg';
 
-function SvgC(props) {
+function SvgC(props: any) {
     return (
         <Svg width={200} height={200} {...props}>
             <G
