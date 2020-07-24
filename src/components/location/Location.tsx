@@ -1,33 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, ScrollView, View } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 
-import { parseTemp } from '../../utils/strings';
 import { calcDayNight } from '../../utils/dates';
 
-import * as DayIcons from '../../assets/icons/day';
-import NightIcons from '../../assets/icons/night';
-import Theme from '../../theme';
-import { Row, Column } from '../../primitives';
-import LocationHeader from '../locationHeader/locationHeader';
+import { API } from '../../constants/api';
+import Locale from '../locale/Locale';
+import Weather from '../weather/Weather';
 
-const Location: React.FC = (props: any) => {
+interface LocationProps {
+    lat: string;
+    lng: string;
+    ready: boolean;
+}
+
+const Location = (props: LocationProps) => {
     const [userLocation, setUserLocation] = useState<any>(null);
     const [userLocationReady, setUserLocationReady] = useState<any>(false);
     const [currentWeather, setCurrentWeather] = useState<any>(false);
     const [currentWeatherReady, setCurrentWeatherReady] = useState<any>(false);
     const [isDay, setIsDay] = useState<any>(true);
-    const [timeKnown, setTimeKnown] = useState<any>(false);
 
     const fetchLocation = async (lat: string, lng: string) => {
-        return await fetch(
-            `https://www.metaweather.com/api/location/search/?lattlong=${lat},${lng}`,
-        );
+        return await fetch(`${API.URL}/search/?lattlong=${lat},${lng}`);
     };
 
     const getLocationWeather = async (locId: any) => {
-        return await fetch(
-            `https://www.metaweather.com/api/location/${locId}/`,
-        );
+        return await fetch(`${API.URL}/${locId}/`);
     };
 
     useEffect(() => {
@@ -54,42 +52,19 @@ const Location: React.FC = (props: any) => {
         }
     }, [userLocation, userLocationReady]);
 
-    const renderIcon: any = (abbr: string) => {
-        if (currentWeatherReady) {
-            const WeatherIcon: any =
-                DayIcons[abbr.charAt(0).toUpperCase() + abbr.slice(1)];
-            return <WeatherIcon />;
-        } else {
-            return null;
-        }
-    };
-
-    const theDate = new Date();
-
     return (
         <>
             {!props.ready ? null : (
                 <ScrollView style={styles.locationDisplay}>
                     {userLocationReady && (
-                        <LocationHeader location={userLocation.title} />
+                        <Locale userLocation={userLocation} />
                     )}
-                    <Row>
-                        <Text style={styles.locationDisplay}>
-                            {currentWeatherReady &&
-                                `${
-                                    currentWeather?.consolidated_weather[0]
-                                        ?.weather_state_name
-                                } - ${parseTemp(
-                                    currentWeather?.consolidated_weather[0]
-                                        ?.the_temp,
-                                )}`}
-                        </Text>
-                        {currentWeatherReady &&
-                            renderIcon(
-                                currentWeather.consolidated_weather[0]
-                                    .weather_state_abbr,
-                            )}
-                    </Row>
+                    {currentWeatherReady && (
+                        <Weather
+                            currentWeather={currentWeather}
+                            isDay={isDay}
+                        />
+                    )}
                 </ScrollView>
             )}
         </>
@@ -98,11 +73,25 @@ const Location: React.FC = (props: any) => {
 
 const styles: any = StyleSheet.create({
     locationDisplay: {
+        display: 'flex',
+        color: '#fff',
+        width: '100%',
+    },
+    iconStyle: {
+        flex: 1,
+        display: 'flex',
+    },
+    colStyle: {
+        margin: 12,
+        flex: 1,
+        display: 'flex',
+        borderRadius: 8,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    textCenter: {
         textAlign: 'center',
         color: '#fff',
-    },
-    scrollView: {
-        flex: 1,
     },
 });
 

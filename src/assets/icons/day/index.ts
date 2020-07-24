@@ -9,4 +9,4 @@ import Hc from './Hc';
 import Lc from './Lc';
 import C from './C';
 
-export { Sn, Sl, H, T, Hr, Lr, S, Hc, Lc, C };
+export const DAYICONS: any = { Sn, Sl, H, T, Hr, Lr, S, Hc, Lc, C };

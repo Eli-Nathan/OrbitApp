@@ -9,7 +9,7 @@ import Hc from './Hc';
 import Lc from './Lc';
 import C from './C';
 
-export default {
+export const NIGHTICONS = {
     Sn,
     Sl,
     H,

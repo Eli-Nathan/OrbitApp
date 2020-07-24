@@ -1,9 +1,9 @@
 import * as React from 'react';
-import Svg, {G, Path} from 'react-native-svg';
+import Svg, { G, Path } from 'react-native-svg';
 
 function SvgLc(props: any) {
     return (
-        <Svg width={200} height={200} {...props}>
+        <Svg width={17} height={17} {...props}>
             <G fill="none" fillRule="evenodd">
                 <Path
                     d="M90.592 75.557c0 43.878 35.627 79.448 79.574 79.448 5.775 0 11.406-.614 16.831-1.78C172.647 172.506 149.66 185 123.75 185 80.258 185 45 149.798 45 106.375c0-36.961 25.544-67.966 59.968-76.376-9.06 12.899-14.376 28.608-14.376 45.558z"

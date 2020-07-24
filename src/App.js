@@ -47,8 +47,6 @@ const styles = StyleSheet.create({
     safeAreaView: {
         backgroundColor: '#223B51',
         height: '100%',
-        flex: 1,
-        flexDirection: 'column',
     },
 });
 

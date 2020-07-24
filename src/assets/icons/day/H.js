@@ -1,9 +1,9 @@
 import * as React from 'react';
-import Svg, {G, Ellipse, Path} from 'react-native-svg';
+import Svg, { G, Ellipse, Path } from 'react-native-svg';
 
 function SvgH(props: any) {
     return (
-        <Svg width={200} height={200} {...props}>
+        <Svg width={17} height={17} {...props}>
             <G fill="none" fillRule="evenodd">
                 <G fill="#ADE8FF">
                     <Ellipse

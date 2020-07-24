@@ -8,6 +8,7 @@ const Row = props => {
 const styles = StyleSheet.create({
     rowStyle: {
         flexDirection: 'row',
+        flexBasis: 1,
     },
 });
 

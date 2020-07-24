@@ -1,14 +1,12 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 
 import Theme from '../../theme';
 
 const LocationHeader = props => {
     return (
         <View styles={styles.headerView}>
-            <Text style={styles.headerViewTextStyle}>
-                {`${props.location} weather`}
-            </Text>
+            <Text style={styles.headerViewTextStyle}>{props.location}</Text>
         </View>
     );
 };
