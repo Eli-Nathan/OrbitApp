@@ -38,11 +38,11 @@
 		</dict>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Always AND When in use - using location</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string></string>
+	<string>Always using location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Using location when app is in use</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>

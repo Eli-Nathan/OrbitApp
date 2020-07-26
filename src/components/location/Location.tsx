@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, ViewStyle, Text, Button } from 'react-native';
 
 import { calcDayNight } from '../../utils/dates';
 
@@ -8,6 +8,7 @@ import Locale from '../locale/Locale';
 import Weather from '../weather/Weather';
 
 interface LocationProps {
+    navigation: any;
     lat: string;
     lng: string;
     ready: boolean;
@@ -15,10 +16,12 @@ interface LocationProps {
 
 const Location = (props: LocationProps) => {
     const [userLocation, setUserLocation] = useState<any>(null);
-    const [userLocationReady, setUserLocationReady] = useState<any>(false);
-    const [currentWeather, setCurrentWeather] = useState<any>(false);
-    const [currentWeatherReady, setCurrentWeatherReady] = useState<any>(false);
-    const [isDay, setIsDay] = useState<any>(true);
+    const [userLocationReady, setUserLocationReady] = useState<boolean>(false);
+    const [currentWeather, setCurrentWeather] = useState<boolean>(false);
+    const [currentWeatherReady, setCurrentWeatherReady] = useState<boolean>(
+        false,
+    );
+    const [isDay, setIsDay] = useState<boolean>(true);
 
     const fetchLocation = async (lat: string, lng: string) => {
         return await fetch(`${API.URL}/search/?lattlong=${lat},${lng}`);
@@ -40,6 +43,7 @@ const Location = (props: LocationProps) => {
     useEffect(() => {
         if (userLocationReady) {
             const { woeid } = userLocation;
+            console.log(userLocation);
             getLocationWeather(woeid)
                 .then(response => response.json())
                 .then(data => {
@@ -67,31 +71,21 @@ const Location = (props: LocationProps) => {
                     )}
                 </ScrollView>
             )}
+
+            <Text>Home</Text>
         </>
     );
 };
 
-const styles: any = StyleSheet.create({
+interface Styles {
+    locationDisplay: ViewStyle;
+}
+
+const styles: any = StyleSheet.create<Styles>({
     locationDisplay: {
         display: 'flex',
         color: '#fff',
         width: '100%',
-    },
-    iconStyle: {
-        flex: 1,
-        display: 'flex',
-    },
-    colStyle: {
-        margin: 12,
-        flex: 1,
-        display: 'flex',
-        borderRadius: 8,
-        textAlign: 'center',
-        alignItems: 'center',
-    },
-    textCenter: {
-        textAlign: 'center',
-        color: '#fff',
     },
 });
 
