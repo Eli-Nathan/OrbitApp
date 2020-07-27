@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, ViewStyle, Text, Button } from 'react-native';
 
-import { calcDayNight } from '../../utils/dates';
+import { calcIsDay } from '../../utils/dates';
 
 import { API } from '../../constants/api';
 import Locale from '../locale/Locale';
@@ -47,7 +47,7 @@ const Location = (props: LocationProps) => {
                 .then(data => {
                     setCurrentWeather(data);
                     setIsDay(
-                        calcDayNight(data.sun_rise, data.sun_set, new Date()),
+                        calcIsDay(data.sun_rise, data.sun_set, new Date()),
                     );
                     setCurrentWeatherReady(true);
                 });

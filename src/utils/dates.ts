@@ -1,4 +1,4 @@
-export const calcDayNight = (
+export const calcIsDay = (
     sun_rise: string,
     sun_set: string,
     now: Date,
