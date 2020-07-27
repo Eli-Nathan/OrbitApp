@@ -19,7 +19,6 @@ describe('location reducer', () => {
                     payload: {
                         lat: 1,
                         lng: 2,
-                        fetching: false,
                     },
                 };
                 expect(setLatLng(1, 2)).toEqual(expectedAction);

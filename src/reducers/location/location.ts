@@ -1,4 +1,4 @@
-import { SET_LAT_LNG, SET_FETCHING, SET_ERROR, SET_LOCATION_DATA } from './actions';
+import { SET_LAT_LNG, SET_FETCHING, SET_ERROR, SET_LOCATION_DATA, SET_CURRENT_WEATHER } from './actions';
 import { LocationState, LocationStateAction } from './types';
 
 export const initialState = {
@@ -30,6 +30,13 @@ export const locationReducer = (
                     fetching: false,
                     error: null,
                 };
+                case SET_CURRENT_WEATHER:
+                    return {
+                        ...state,
+                        weather: action.payload?.weather,
+                        fetching: false,
+                        error: null,
+                    };
         case SET_FETCHING:
             return {
                 ...state,

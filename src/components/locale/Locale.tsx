@@ -6,13 +6,14 @@ import moment from 'moment';
 import Theme from '../../theme';
 import { Row, Column, Text } from '../../primitives';
 import LocationHeader from '../locationHeader/locationHeader';
+import useLiveClock from '../../hooks/useLiveClock';
 
 interface LocaleProps {
     userLocation: any;
 }
 
 const Locale = (props: LocaleProps) => {
-    const theDate = new Date();
+    const liveDate = useLiveClock();
     return (
         <>
             <Column style={styles.colStyle}>
@@ -23,10 +24,10 @@ const Locale = (props: LocaleProps) => {
                     ]}
                     style={styles.linearGradient}>
                     <Text style={{ ...styles.textCenter, ...styles.time }}>
-                        {`${moment().format('h:mma')}`}
+                        {`${liveDate.format('h:mma')}`}
                     </Text>
                     <Text style={styles.textCenter} marginBottom={12}>
-                        {`${moment().format('dddd')} ${moment().format(
+                        {`${liveDate.format('dddd')} ${liveDate.format(
                             'Do MMMM',
                         )}`}
                     </Text>

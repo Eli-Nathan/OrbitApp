@@ -11,6 +11,7 @@ interface LocationProps {
     lat: number;
     lng: number;
     ready: boolean;
+    isDay: boolean;
 }
 
 const Location = (props: LocationProps) => {

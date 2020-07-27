@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FunctionComponent, Dispatch } from 'react';
+import React, { useEffect, useState, FunctionComponent } from 'react';
 import { View, Text, Platform, TouchableHighlight } from 'react-native';
 import { connect } from 'react-redux';
 import Geolocation from '@react-native-community/geolocation';
@@ -17,20 +17,32 @@ import {
 
 import Screen from '..';
 import Location from '../../location/Location';
-import { RootState } from 'reducers';
 import * as ACTIONS from '../../../reducers/location/actions';
 import { API } from '../../../constants/api';
+import { RootState } from 'reducers';
+import { calcIsDay } from '../../../utils/dates';
+import useLiveClock from '../../../hooks/useLiveClock';
 
 interface HomeScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
     dispatchSetLatLng: any;
     dispatchSetLocationData: any;
+    dispatchSetCurrentWeather: any;
+    dispatchSetFetching: any;
+    dispatchSetError: any;
+    sunRise: string;
+    sunSet: string;
 }
 
 const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     navigation,
     dispatchSetLatLng,
     dispatchSetLocationData,
+    dispatchSetCurrentWeather,
+    dispatchSetFetching,
+    dispatchSetError,
+    sunRise,
+    sunSet,
 }) => {
     const [position, setPosition] = useState({ lat: 0, lng: 0, ready: false });
 
@@ -46,23 +58,27 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
         Geolocation.getCurrentPosition(
             pos => {
                 if (pos.coords.latitude && pos.coords.longitude) {
+                    dispatchSetFetching();
                     const lat = pos.coords.latitude;
                     const lng = pos.coords.longitude;
                     dispatchSetLatLng(lat, lng);
                     fetchLocation(lat, lng)
                         .then(response => response.json())
                         .then(data => {
-                            const all = data;
-                            console.log('data', data);
-                            console.log('minus first', [
-                                ...data.splice(1, data.length),
-                            ]);
                             dispatchSetLocationData(
                                 data[0].woeid,
                                 data[0].title,
                                 [...data.splice(1, data.length)],
                             );
-                        });
+                            getLocationWeather(data[0].woeid)
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log('weather', data);
+                                    dispatchSetCurrentWeather(data);
+                                });
+                        })
+                        .catch(error => dispatchSetError(error));
+
                     setPosition({
                         lat,
                         lng,
@@ -70,7 +86,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                     });
                 }
             },
-            error => console.log('error', error),
+            error => dispatchSetError(error),
         );
 
     const getPosition = () => {
@@ -104,14 +120,14 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                         break;
                 }
             })
-            .catch(error => {
-                console.log('Could not verify location');
-            });
+            .catch(error => dispatchSetError(error));
     };
 
     useEffect(() => {
         getPosition();
     }, []);
+
+    const liveTime = new Date(useLiveClock());
 
     return (
         <Screen navigation={navigation} hasTopLinks>
@@ -121,6 +137,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                         lat={position.lat}
                         lng={position.lng}
                         ready={position.ready}
+                        isDay={calcIsDay(sunRise, sunSet, liveTime)}
                     />
                 ) : (
                     <TouchableHighlight
@@ -143,10 +160,13 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     );
 };
 
-const mapStateToProps = (state: RootState) => ({
-    lat: state.location.lat,
-    lng: state.location.lng,
-});
+const mapStateToProps = (state: RootState) => {
+    console.log('STATE', state);
+    return {
+        sunRise: state.location?.weather?.sun_rise || new Date(new Date().setHours(5,0,0,0)).toISOString(),
+        sunSet: state.location?.weather?.sun_set || new Date(new Date().setHours(20,0,0,0)).toISOString(),
+    };
+};
 
 const mapDispatchToProps = (dispatch: any) => ({
     dispatchSetLatLng: (lat: number, lng: number) => {
@@ -154,6 +174,9 @@ const mapDispatchToProps = (dispatch: any) => ({
     },
     dispatchSetLocationData: (woeid: number, name: string, nearby: any) => {
         dispatch(ACTIONS.setLocationData(woeid, name, nearby));
+    },
+    dispatchSetCurrentWeather: (weather: any) => {
+        dispatch(ACTIONS.setCurrentWeather(weather));
     },
     dispatchSetFetching: () => dispatch(ACTIONS.setFetching()),
     dispatchSetError: (error: string) => dispatch(ACTIONS.setError(error)),

@@ -2,13 +2,13 @@ export const SET_LAT_LNG = 'SET_LAT_LNG';
 export const SET_FETCHING = 'SET_FETCHING';
 export const SET_ERROR = 'SET_ERROR';
 export const SET_LOCATION_DATA = 'SET_LOCATION_DATA';
+export const SET_CURRENT_WEATHER = 'SET_CURRENT_WEATHER';
 
 export const setLatLng = (lat: number, lng: number) => ({
     type: SET_LAT_LNG,
     payload: {
         lat,
         lng,
-        fetching: false,
     },
 });
 
@@ -22,6 +22,13 @@ export const setLocationData = (
         woeid,
         locationName,
         nearby,
+    },
+});
+
+export const setCurrentWeather = (weather: any) => ({
+    type: SET_CURRENT_WEATHER,
+    payload: {
+        weather,
         fetching: false,
     },
 });
