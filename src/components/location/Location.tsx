@@ -8,67 +8,21 @@ import Locale from '../locale/Locale';
 import Weather from '../weather/Weather';
 
 interface LocationProps {
-    lat: number;
-    lng: number;
-    ready: boolean;
+    weather: any;
+    location: any;
     isDay: boolean;
 }
 
 const Location = (props: LocationProps) => {
-    const [userLocation, setUserLocation] = useState<any>(null);
-    const [userLocationReady, setUserLocationReady] = useState<boolean>(false);
-    const [currentWeather, setCurrentWeather] = useState<boolean>(false);
-    const [currentWeatherReady, setCurrentWeatherReady] = useState<boolean>(
-        false,
-    );
-    const [isDay, setIsDay] = useState<boolean>(true);
-
-    const fetchLocation = async (lat: string, lng: string) => {
-        return await fetch(`${API.URL}/search/?lattlong=${lat},${lng}`);
-    };
-
-    const getLocationWeather = async (locId: any) => {
-        return await fetch(`${API.URL}/${locId}/`);
-    };
-
-    useEffect(() => {
-        fetchLocation(`${props.lat}`, `${props.lng}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data[0]);
-                setUserLocation(data[0]);
-                setUserLocationReady(true);
-            });
-    }, [props.lat, props.lng, props.ready]);
-
-    useEffect(() => {
-        if (userLocationReady) {
-            const { woeid } = userLocation;
-            getLocationWeather(woeid)
-                .then(response => response.json())
-                .then(data => {
-                    setCurrentWeather(data);
-                    setIsDay(
-                        calcIsDay(data.sun_rise, data.sun_set, new Date()),
-                    );
-                    setCurrentWeatherReady(true);
-                });
-        }
-    }, [userLocation, userLocationReady]);
-
     return (
         <>
-            {!props.ready ? null : (
+            {!props.weather ? null : (
                 <ScrollView style={styles.locationDisplay}>
-                    {userLocationReady && (
-                        <Locale userLocation={userLocation} />
-                    )}
-                    {currentWeatherReady && (
-                        <Weather
-                            currentWeather={currentWeather}
-                            isDay={isDay}
-                        />
-                    )}
+                    <Locale userLocation={props.location} />
+                    <Weather
+                        currentWeather={props.weather}
+                        isDay={props.isDay}
+                    />
                 </ScrollView>
             )}
         </>

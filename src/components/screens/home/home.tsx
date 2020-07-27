@@ -22,6 +22,7 @@ import { API } from '../../../constants/api';
 import { RootState } from 'reducers';
 import { calcIsDay } from '../../../utils/dates';
 import useLiveClock from '../../../hooks/useLiveClock';
+import { LocationState } from 'reducers/location/types';
 
 interface HomeScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -32,6 +33,8 @@ interface HomeScreenProps {
     dispatchSetError: any;
     sunRise: string;
     sunSet: string;
+    weather: any;
+    location: LocationState;
 }
 
 const HomeScreen: FunctionComponent<HomeScreenProps> = ({
@@ -43,8 +46,9 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     dispatchSetError,
     sunRise,
     sunSet,
+    weather,
+    location,
 }) => {
-    const [position, setPosition] = useState({ lat: 0, lng: 0, ready: false });
 
     const fetchLocation = async (lat: number, lng: number) => {
         return await fetch(`${API.URL}/search/?lattlong=${lat},${lng}`);
@@ -78,12 +82,6 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                                 });
                         })
                         .catch(error => dispatchSetError(error));
-
-                    setPosition({
-                        lat,
-                        lng,
-                        ready: true,
-                    });
                 }
             },
             error => dispatchSetError(error),
@@ -132,12 +130,11 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     return (
         <Screen navigation={navigation} hasTopLinks>
             <View>
-                {position.ready ? (
+                {location.lat ? (
                     <Location
-                        lat={position.lat}
-                        lng={position.lng}
-                        ready={position.ready}
                         isDay={calcIsDay(sunRise, sunSet, liveTime)}
+                        weather={weather}
+                        location={location}
                     />
                 ) : (
                     <TouchableHighlight
@@ -165,6 +162,9 @@ const mapStateToProps = (state: RootState) => {
     return {
         sunRise: state.location?.weather?.sun_rise || new Date(new Date().setHours(5,0,0,0)).toISOString(),
         sunSet: state.location?.weather?.sun_set || new Date(new Date().setHours(20,0,0,0)).toISOString(),
+        weather: state.location?.weather,
+        location: state.location,
+        fetching: state.location.fetching,
     };
 };
 
