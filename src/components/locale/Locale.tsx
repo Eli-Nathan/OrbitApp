@@ -14,7 +14,7 @@ interface LocaleProps {
 const Locale = (props: LocaleProps) => {
     const theDate = new Date();
     return (
-        <Row style={styles.rowStyle}>
+        <>
             <Column style={styles.colStyle}>
                 <LinearGradient
                     colors={[
@@ -33,7 +33,7 @@ const Locale = (props: LocaleProps) => {
                     <LocationHeader location={props.userLocation.title} />
                 </LinearGradient>
             </Column>
-        </Row>
+        </>
     );
 };
 

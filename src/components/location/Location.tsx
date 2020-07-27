@@ -8,9 +8,8 @@ import Locale from '../locale/Locale';
 import Weather from '../weather/Weather';
 
 interface LocationProps {
-    navigation: any;
-    lat: string;
-    lng: string;
+    lat: number;
+    lng: number;
     ready: boolean;
 }
 
@@ -32,7 +31,7 @@ const Location = (props: LocationProps) => {
     };
 
     useEffect(() => {
-        fetchLocation(props.lat, props.lng)
+        fetchLocation(`${props.lat}`, `${props.lng}`)
             .then(response => response.json())
             .then(data => {
                 setUserLocation(data[0]);
@@ -43,7 +42,6 @@ const Location = (props: LocationProps) => {
     useEffect(() => {
         if (userLocationReady) {
             const { woeid } = userLocation;
-            console.log(userLocation);
             getLocationWeather(woeid)
                 .then(response => response.json())
                 .then(data => {
@@ -71,8 +69,6 @@ const Location = (props: LocationProps) => {
                     )}
                 </ScrollView>
             )}
-
-            <Text>Home</Text>
         </>
     );
 };

@@ -28,7 +28,7 @@ const renderIcon: any = (abbr: string, isDay: boolean) => {
 const Weather = ({currentWeather, isDay}: WeatherProps) => {
     const theDate = new Date();
     return (
-        <Row>
+        <>
             <Column style={styles.colStyle}>
                 {renderIcon(
                     currentWeather.consolidated_weather[0]
@@ -46,7 +46,7 @@ const Weather = ({currentWeather, isDay}: WeatherProps) => {
                     }
                 </Text>
             </Column>
-        </Row>
+        </>
     );
 };
 
