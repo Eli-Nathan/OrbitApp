@@ -34,6 +34,7 @@ const Location = (props: LocationProps) => {
         fetchLocation(`${props.lat}`, `${props.lng}`)
             .then(response => response.json())
             .then(data => {
+                console.log(data[0]);
                 setUserLocation(data[0]);
                 setUserLocationReady(true);
             });

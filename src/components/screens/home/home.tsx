@@ -19,29 +19,53 @@ import Screen from '..';
 import Location from '../../location/Location';
 import { RootState } from 'reducers';
 import * as ACTIONS from '../../../reducers/location/actions';
+import { API } from '../../../constants/api';
 
 interface HomeScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
-    dispatchAddLocation: any;
+    dispatchSetLatLng: any;
+    dispatchSetLocationData: any;
 }
 
 const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     navigation,
-    dispatchAddLocation,
+    dispatchSetLatLng,
+    dispatchSetLocationData,
 }) => {
     const [position, setPosition] = useState({ lat: 0, lng: 0, ready: false });
+
+    const fetchLocation = async (lat: number, lng: number) => {
+        return await fetch(`${API.URL}/search/?lattlong=${lat},${lng}`);
+    };
+
+    const getLocationWeather = async (locId: any) => {
+        return await fetch(`${API.URL}/${locId}/`);
+    };
 
     const geoLocate = () =>
         Geolocation.getCurrentPosition(
             pos => {
                 if (pos.coords.latitude && pos.coords.longitude) {
-                    dispatchAddLocation(
-                        pos.coords.latitude,
-                        pos.coords.longitude,
-                    );
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+                    dispatchSetLatLng(lat, lng);
+                    fetchLocation(lat, lng)
+                        .then(response => response.json())
+                        .then(data => {
+                            const all = data;
+                            console.log('data', data);
+                            console.log('minus first', [
+                                ...data.splice(1, data.length),
+                            ]);
+                            dispatchSetLocationData(
+                                data[0].woeid,
+                                data[0].title,
+                                [...data.splice(1, data.length)],
+                            );
+                        });
                     setPosition({
-                        lat: pos.coords.latitude,
-                        lng: pos.coords.longitude,
+                        lat,
+                        lng,
                         ready: true,
                     });
                 }
@@ -125,8 +149,11 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    dispatchAddLocation: (lat: number, lng: number) => {
-        dispatch(ACTIONS.addLocation(lat, lng));
+    dispatchSetLatLng: (lat: number, lng: number) => {
+        dispatch(ACTIONS.setLatLng(lat, lng));
+    },
+    dispatchSetLocationData: (woeid: number, name: string, nearby: any) => {
+        dispatch(ACTIONS.setLocationData(woeid, name, nearby));
     },
     dispatchSetFetching: () => dispatch(ACTIONS.setFetching()),
     dispatchSetError: (error: string) => dispatch(ACTIONS.setError(error)),

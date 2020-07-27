@@ -1,9 +1,9 @@
 import { LocationState, LocationStateAction } from './types';
 import {
-    ADD_LOCATION,
+    SET_LAT_LNG,
     SET_FETCHING,
     SET_ERROR,
-    addLocation,
+    setLatLng,
     setError,
     setFetching,
 } from './actions';
@@ -12,17 +12,17 @@ jest.mock('react-native-gesture-handler', () => {});
 
 describe('location reducer', () => {
     describe('actions', () => {
-        describe('addLocation', () => {
+        describe('setLatLng', () => {
             it('should create an action to add the location to state', () => {
                 const expectedAction = {
-                    type: ADD_LOCATION,
+                    type: SET_LAT_LNG,
                     payload: {
                         lat: 1,
                         lng: 2,
                         fetching: false,
                     },
                 };
-                expect(addLocation(1, 2)).toEqual(expectedAction);
+                expect(setLatLng(1, 2)).toEqual(expectedAction);
             });
         });
         describe('setFetching', () => {
@@ -63,7 +63,7 @@ describe('location reducer', () => {
             };
             expect(
                 locationReducer(initialState, {
-                    type: 'ADD_LOCATION',
+                    type: 'SET_LAT_LNG',
                     payload,
                 }),
             ).toEqual({

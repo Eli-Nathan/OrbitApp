@@ -3,6 +3,9 @@ export interface LocationState {
     lng?: number;
     fetching?: boolean;
     error?: string | null;
+    woeid?: number | null;
+    locationName?: string | null;
+    nearby?: any;
 }
 
 export interface LocationStateAction {
