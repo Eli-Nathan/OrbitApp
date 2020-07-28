@@ -31,7 +31,9 @@ const Locale = (props: LocaleProps) => {
                             'Do MMMM',
                         )}`}
                     </Text>
-                    <LocationHeader location={props.userLocation.title} />
+                    <LocationHeader
+                        location={props.userLocation.locationName}
+                    />
                 </LinearGradient>
             </Column>
         </>
