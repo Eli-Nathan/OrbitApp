@@ -7,23 +7,25 @@ import {
 } from 'react-navigation';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-import { Row } from '../../primitives';
+import { Row } from '../primitives';
 
 interface ScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
     light?: boolean;
-    hasTopLinks?: boolean;
+    hasSearch?: boolean;
+    nightTheme: boolean;
 }
 
 const Screen: FunctionComponent<ScreenProps> = ({
-    hasTopLinks,
+    hasSearch,
     children,
     navigation,
     light,
+    nightTheme,
 }) => {
     const styles = StyleSheet.create({
         safeAreaView: {
-            backgroundColor: light ? '#fff' : '#223B51',
+            backgroundColor: light || !nightTheme ? '#fff' : '#223B51',
             height: '100%',
         },
         rowStyles: {
@@ -31,14 +33,14 @@ const Screen: FunctionComponent<ScreenProps> = ({
             padding: 12,
         },
         navItem: {
-            color: '#fff',
+            color: nightTheme ? '#fff' : '#000',
         },
     });
     return (
         <SafeAreaView style={styles.safeAreaView}>
             <StatusBar barStyle="light-content" />
             <View>
-                {hasTopLinks && (
+                {hasSearch && (
                     <Row style={styles.rowStyles}>
                         <TouchableWithoutFeedback
                             onPress={() => navigation.navigate('Search')}>

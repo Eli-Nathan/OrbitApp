@@ -1,8 +1,16 @@
+export const SET_NIGHT_THEME = 'SET_NIGHT_THEME';
 export const SET_LAT_LNG = 'SET_LAT_LNG';
 export const SET_FETCHING = 'SET_FETCHING';
 export const SET_ERROR = 'SET_ERROR';
 export const SET_LOCATION_DATA = 'SET_LOCATION_DATA';
 export const SET_CURRENT_WEATHER = 'SET_CURRENT_WEATHER';
+
+export const setNightTheme = (nightTheme: boolean) => ({
+    type: SET_NIGHT_THEME,
+    payload: {
+        nightTheme,
+    },
+});
 
 export const setLatLng = (lat: number, lng: number) => ({
     type: SET_LAT_LNG,
@@ -12,16 +20,11 @@ export const setLatLng = (lat: number, lng: number) => ({
     },
 });
 
-export const setLocationData = (
-    woeid: number,
-    locationName: string,
-    nearby: any,
-) => ({
+export const setLocationData = (woeid: number, locationName: string) => ({
     type: SET_LOCATION_DATA,
     payload: {
         woeid,
         locationName,
-        nearby,
     },
 });
 

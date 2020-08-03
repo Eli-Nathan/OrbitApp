@@ -16,71 +16,61 @@ import {
 } from 'react-navigation';
 
 import Screen from '..';
-import Location from '../../location/Location';
-import * as ACTIONS from '../../../reducers/location/actions';
-import { API } from '../../../constants/api';
+import Location from '../../components/location/Location';
+import * as ACTIONS from '../../reducers/location/actions';
+import { API } from '../../constants/api';
 import { RootState } from 'reducers';
-import { calcIsDay } from '../../../utils/dates';
-import useLiveClock from '../../../hooks/useLiveClock';
+import { calcIsDay } from '../../utils/dates';
+import useLiveClock from '../../hooks/useLiveClock';
 import { LocationState } from 'reducers/location/types';
+import apiFetch from '../../hooks/apiFetch/apiFetch';
 
 interface HomeScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+    dispatchSetNightTheme: any;
     dispatchSetLatLng: any;
     dispatchSetLocationData: any;
     dispatchSetCurrentWeather: any;
     dispatchSetFetching: any;
     dispatchSetError: any;
-    sunRise: string;
-    sunSet: string;
     weather: any;
     location: LocationState;
+    nightTheme: boolean;
 }
 
 const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     navigation,
+    dispatchSetNightTheme,
     dispatchSetLatLng,
     dispatchSetLocationData,
     dispatchSetCurrentWeather,
     dispatchSetFetching,
     dispatchSetError,
-    sunRise,
-    sunSet,
     weather,
     location,
+    nightTheme,
 }) => {
-
-    const fetchLocation = async (lat: number, lng: number) => {
-        return await fetch(`${API.URL}/search/?lattlong=${lat},${lng}`);
-    };
-
-    const getLocationWeather = async (locId: any) => {
-        return await fetch(`${API.URL}/${locId}/`);
-    };
-
     const geoLocate = () =>
         Geolocation.getCurrentPosition(
             pos => {
                 if (pos.coords.latitude && pos.coords.longitude) {
                     dispatchSetFetching();
                     const lat = pos.coords.latitude;
-                    const lng = pos.coords.longitude;
-                    dispatchSetLatLng(lat, lng);
-                    fetchLocation(lat, lng)
-                        .then(response => response.json())
-                        .then(data => {
-                            dispatchSetLocationData(
-                                data[0].woeid,
-                                data[0].title,
-                                [...data.splice(1, data.length)],
-                            );
-                            getLocationWeather(data[0].woeid)
-                                .then(response => response.json())
-                                .then(data => {
-                                    console.log('weather', data);
-                                    dispatchSetCurrentWeather(data);
-                                });
-                        })
+                    const lon = pos.coords.longitude;
+                    dispatchSetLatLng(lat, lon);
+                    apiFetch(API.WEATHER, {
+                        lat,
+                        lon,
+                        units: 'metric',
+                    })
+                    .then(data => {
+                        dispatchSetLocationData(
+                            data.id,
+                            data.name,
+                        );
+                        dispatchSetCurrentWeather(data);
+                        dispatchSetNightTheme(!calcIsDay(data.sys.sunrise, data.sys.sunset, new Date()))
+                    })
                         .catch(error => dispatchSetError(error));
                 }
             },
@@ -128,13 +118,13 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     const liveTime = new Date(useLiveClock());
 
     return (
-        <Screen navigation={navigation} hasTopLinks>
+        <Screen navigation={navigation} hasSearch nightTheme={nightTheme}>
             <View>
                 {location.lat ? (
                     <Location
-                        isDay={calcIsDay(sunRise, sunSet, liveTime)}
                         weather={weather}
                         location={location}
+                        nightTheme={nightTheme}
                     />
                 ) : (
                     <TouchableHighlight
@@ -145,7 +135,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                         }>
                         <Text
                             style={{
-                                color: '#fff',
+                                color: nightTheme ? '#000' : '#fff',
                                 textAlign: 'center',
                             }}>
                             Allow WeatherApp to use location services
@@ -158,22 +148,25 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
 };
 
 const mapStateToProps = (state: RootState) => {
-    console.log('STATE', state);
     return {
         sunRise: state.location?.weather?.sun_rise || new Date(new Date().setHours(5,0,0,0)).toISOString(),
         sunSet: state.location?.weather?.sun_set || new Date(new Date().setHours(20,0,0,0)).toISOString(),
         weather: state.location?.weather,
         location: state.location,
-        fetching: state.location.fetching,
+        fetching: state.location?.fetching,
+        nightTheme: state.theme?.nightTheme,
     };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-    dispatchSetLatLng: (lat: number, lng: number) => {
-        dispatch(ACTIONS.setLatLng(lat, lng));
+    dispatchSetNightTheme: (nightTheme: boolean) => {
+        dispatch(ACTIONS.setNightTheme(nightTheme));
     },
-    dispatchSetLocationData: (woeid: number, name: string, nearby: any) => {
-        dispatch(ACTIONS.setLocationData(woeid, name, nearby));
+    dispatchSetLatLng: (lat: number, lon: number) => {
+        dispatch(ACTIONS.setLatLng(lat, lon));
+    },
+    dispatchSetLocationData: (woeid: number, name: string) => {
+        dispatch(ACTIONS.setLocationData(woeid, name));
     },
     dispatchSetCurrentWeather: (weather: any) => {
         dispatch(ACTIONS.setCurrentWeather(weather));

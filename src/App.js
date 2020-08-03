@@ -25,9 +25,9 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import rootReducer from './reducers';
 import { Row } from './primitives';
-import Screen from './components/screens';
-import HomeScreen from './components/screens/home/home';
-import SearchScreen from './components/screens/search';
+import Screen from './screens';
+import HomeScreen from './screens/home/home';
+import SearchScreen from './screens/search';
 import Location from './components/location/Location';
 
 const store = createStore(

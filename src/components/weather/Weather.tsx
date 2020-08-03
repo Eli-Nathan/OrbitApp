@@ -1,71 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, ScrollView, View } from 'react-native';
+import React, { FunctionComponent } from 'react';
+import { StyleSheet, Image } from 'react-native';
 
-import { DAYICONS } from '../../assets/icons/day';
-import { NIGHTICONS } from '../../assets/icons/night';
+import { API } from '../../constants/api';
 import { parseTemp } from '../../utils/strings';
-import { Row, Column, Text } from '../../primitives';
+import { Column, Text } from '../../primitives';
 
 interface WeatherProps {
     currentWeather: any,
-    isDay: boolean,
+    nightTheme: boolean;
 }
 
-const renderIcon: any = (abbr: string, isDay: boolean) => {
-    const obj = isDay ? DAYICONS : NIGHTICONS;
-    const WeatherIcon =
-        obj[abbr.charAt(0).toUpperCase() + abbr.slice(1)];
-    return (
-        <WeatherIcon
-            width={225}
-            height={225}
-            viewBox={'0 0 190 190'}
-            style={styles.iconStyle}
-        />
-    );
-}
+const renderIcon = (code: string) => (
+    <Image source={{uri: `${API.ICON}${code}@4x.png`}} style={{width: 225, height: 225}} />
+);
 
-const Weather = ({currentWeather, isDay}: WeatherProps) => {
-    const theDate = new Date();
+const Weather: FunctionComponent<WeatherProps>= ({ currentWeather, nightTheme }) => {
+    const styles: any = StyleSheet.create({
+        colStyle: {
+            margin: 12,
+            flex: 1,
+            display: 'flex',
+            borderRadius: 8,
+            textAlign: 'center',
+            alignItems: 'center',
+        },
+        textCenter: {
+            textAlign: 'center',
+            color: nightTheme ? '#fff' : '#000',
+        },
+        temp: {
+            fontSize: 68,
+        },
+    });
     return (
         <>
             <Column style={styles.colStyle}>
-                {renderIcon(
-                    currentWeather.consolidated_weather[0]
-                        .weather_state_abbr, isDay
-                )}
+                {renderIcon(currentWeather.weather[0].icon)}
                 <Text style={{ ...styles.textCenter, ...styles.temp }}>
-                    {parseTemp(
-                        currentWeather?.consolidated_weather[0]
-                            ?.the_temp,
-                    )}
+                    {parseTemp(currentWeather?.main?.temp)}
                 </Text>
                 <Text style={styles.textCenter}>
-                    {currentWeather?.consolidated_weather[0]
-                        ?.weather_state_name
-                    }
+                    {currentWeather?.weather[0].main}
                 </Text>
             </Column>
         </>
     );
 };
-
-const styles: any = StyleSheet.create({
-    colStyle: {
-        margin: 12,
-        flex: 1,
-        display: 'flex',
-        borderRadius: 8,
-        textAlign: 'center',
-        alignItems: 'center',
-    },
-    textCenter: {
-        textAlign: 'center',
-        color: '#fff',
-    },
-    temp: {
-        fontSize: 68,
-    },
-});
 
 export default Weather;

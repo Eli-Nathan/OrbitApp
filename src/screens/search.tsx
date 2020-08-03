@@ -7,8 +7,11 @@ import {
 } from 'react-navigation';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-import { Row } from '../../primitives';
-import Screen from '../../components/screens';
+import { Row } from '../primitives';
+import Screen from '.';
+import apiFetch from '../hooks/apiFetch';
+import { API } from '../constants/api';
+import SearchResults from '../components/searchResults/SearchResults';
 
 interface SearchScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -16,8 +19,17 @@ interface SearchScreenProps {
 
 const SearchScreen: FunctionComponent<SearchScreenProps> = ({ navigation }) => {
     const [searchValue, setSearchValue] = useState('Search...');
+    const [searchResults, setSearchResults] = useState([]);
+    const search = (query: string) => {
+        setSearchValue(query);
+        apiFetch(`${API.LOCATION}`, { query })
+            .then(data => {
+                setSearchResults(data);
+            })
+            .catch(() => setSearchResults([]));
+    };
     return (
-        <Screen navigation={navigation} light>
+        <Screen navigation={navigation} nightTheme={false} light>
             <Row style={styles.rowStyles}>
                 <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                     <Text style={styles.navItem}>Back</Text>
@@ -36,10 +48,11 @@ const SearchScreen: FunctionComponent<SearchScreenProps> = ({ navigation }) => {
                     }}
                     autoFocus
                     onFocus={() => setSearchValue('')}
-                    onChangeText={text => setSearchValue(text)}
+                    onChangeText={text => search(text)}
                     value={searchValue}
                 />
             </Row>
+            <SearchResults query={searchValue} results={searchResults} />
         </Screen>
     );
 };

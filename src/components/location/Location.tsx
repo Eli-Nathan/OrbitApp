@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, ScrollView, ViewStyle, Text, Button } from 'react-native';
 
-import { calcIsDay } from '../../utils/dates';
-
-import { API } from '../../constants/api';
 import Locale from '../locale/Locale';
 import Weather from '../weather/Weather';
 
 interface LocationProps {
     weather: any;
     location: any;
-    isDay: boolean;
+    nightTheme: boolean;
 }
 
 const Location = (props: LocationProps) => {
@@ -18,10 +15,13 @@ const Location = (props: LocationProps) => {
         <>
             {!props.weather ? null : (
                 <ScrollView style={styles.locationDisplay}>
-                    <Locale userLocation={props.location} />
+                    <Locale
+                        nightTheme={props.nightTheme}
+                        userLocation={props.location}
+                    />
                     <Weather
                         currentWeather={props.weather}
-                        isDay={props.isDay}
+                        nightTheme={props.nightTheme}
                     />
                 </ScrollView>
             )}

@@ -1,4 +1,3 @@
-import { LocationState, LocationStateAction } from './types';
 import {
     SET_LAT_LNG,
     SET_FETCHING,
@@ -70,6 +69,7 @@ describe('location reducer', () => {
                 lng: 20,
                 fetching: false,
                 error: null,
+                nightTheme: false,
             });
         });
         it('should set fetching', () => {
@@ -111,7 +111,5 @@ describe('location reducer', () => {
         });
     });
 });
-
-describe('#locationReducer', () => {});
 
 export default locationReducer;

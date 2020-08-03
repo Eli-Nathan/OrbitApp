@@ -10,6 +10,7 @@ import useLiveClock from '../../hooks/useLiveClock';
 
 interface LocaleProps {
     userLocation: any;
+    nightTheme: boolean;
 }
 
 const Locale = (props: LocaleProps) => {
@@ -24,7 +25,7 @@ const Locale = (props: LocaleProps) => {
                     ]}
                     style={styles.linearGradient}>
                     <Text style={{ ...styles.textCenter, ...styles.time }}>
-                        {`${liveDate.format('h:mma')}`}
+                        {`${liveDate.format('HH:mm')}`}
                     </Text>
                     <Text style={styles.textCenter} marginBottom={12}>
                         {`${liveDate.format('dddd')} ${liveDate.format(
