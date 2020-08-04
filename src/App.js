@@ -45,7 +45,11 @@ const App = () => {
                     screenOptions={{
                         headerShown: false,
                     }}>
-                    <Stack.Screen name="Home" component={HomeScreen} />
+                    <Stack.Screen
+                        name="Home"
+                        component={HomeScreen}
+                        initialParams={{ hasWeather: false }}
+                    />
                     <Stack.Screen name="Search" component={SearchScreen} />
                 </Stack.Navigator>
             </NavigationContainer>

@@ -19,14 +19,41 @@ interface SearchScreenProps {
 
 const SearchScreen: FunctionComponent<SearchScreenProps> = ({ navigation }) => {
     const [searchValue, setSearchValue] = useState('Search...');
+    const [fetching, setFetching] = useState(false);
+    const [typingTimeout, setTypingTimeout] = useState(() => 0);
     const [searchResults, setSearchResults] = useState([]);
+
+    const generatePlaceholder = () => {
+        let placeholder;
+        if (searchValue.length === 0) {
+            placeholder = 'Search for your city';
+        } else if (searchResults.length === 0) {
+            placeholder = 'No cities found';
+        }
+        return placeholder;
+    };
+
     const search = (query: string) => {
         setSearchValue(query);
-        apiFetch(`${API.LOCATION}`, { query })
-            .then(data => {
-                setSearchResults(data);
-            })
-            .catch(() => setSearchResults([]));
+        setFetching(true);
+        if (typingTimeout) {
+            clearTimeout(typingTimeout);
+        }
+
+        setTypingTimeout(() => {
+            return setTimeout(() => {
+                setSearchValue(query);
+                apiFetch(`${API.LOCATION}`, { query })
+                    .then(data => {
+                        setFetching(false);
+                        setSearchResults(data);
+                    })
+                    .catch(() => {
+                        setFetching(false);
+                        setSearchResults([]);
+                    });
+            }, 500);
+        });
     };
     return (
         <Screen navigation={navigation} nightTheme={false} light>
@@ -52,7 +79,13 @@ const SearchScreen: FunctionComponent<SearchScreenProps> = ({ navigation }) => {
                     value={searchValue}
                 />
             </Row>
-            <SearchResults query={searchValue} results={searchResults} />
+            <SearchResults
+                navigation={navigation}
+                query={searchValue}
+                results={searchResults}
+                placeholder={generatePlaceholder()}
+                fetching={fetching}
+            />
         </Screen>
     );
 };

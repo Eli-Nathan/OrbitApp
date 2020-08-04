@@ -1,45 +1,58 @@
-import React, { useEffect, useState, FunctionComponent } from 'react';
-import { View, Text, Platform, TouchableHighlight } from 'react-native';
-import { connect } from 'react-redux';
-import Geolocation from '@react-native-community/geolocation';
+import React, {
+    useEffect,
+    useState,
+    useCallback,
+    FunctionComponent,
+} from "react"
+import {
+    Platform,
+    RefreshControl,
+    ScrollView,
+    Text,
+    TouchableHighlight,
+} from "react-native"
+import { connect } from "react-redux"
+import Geolocation from "@react-native-community/geolocation"
 import {
     PERMISSIONS,
     RESULTS,
     checkMultiple,
     request,
     openSettings,
-} from 'react-native-permissions';
+} from "react-native-permissions"
 import {
     NavigationParams,
     NavigationScreenProp,
     NavigationState,
-} from 'react-navigation';
+} from "react-navigation"
+import { useFocusEffect } from "@react-navigation/native"
 
-import Screen from '..';
-import Location from '../../components/location/Location';
-import * as ACTIONS from '../../reducers/location/actions';
-import { API } from '../../constants/api';
-import { RootState } from 'reducers';
-import { calcIsDay } from '../../utils/dates';
-import useLiveClock from '../../hooks/useLiveClock';
-import { LocationState } from 'reducers/location/types';
-import apiFetch from '../../hooks/apiFetch/apiFetch';
+import Screen from ".."
+import Location from "../../components/location/Location"
+import * as ACTIONS from "../../reducers/location/actions"
+import { API } from "../../constants/api"
+import { RootState } from "../../reducers"
+import { calcIsDay } from "../../utils/dates"
+import { LocationState } from "../../reducers/location/types"
+import apiFetch from "../../hooks/apiFetch/apiFetch"
 
 interface HomeScreenProps {
-    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
-    dispatchSetNightTheme: any;
-    dispatchSetLatLng: any;
-    dispatchSetLocationData: any;
-    dispatchSetCurrentWeather: any;
-    dispatchSetFetching: any;
-    dispatchSetError: any;
-    weather: any;
-    location: LocationState;
-    nightTheme: boolean;
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>
+    route: any
+    dispatchSetNightTheme: any
+    dispatchSetLatLng: any
+    dispatchSetLocationData: any
+    dispatchSetCurrentWeather: any
+    dispatchSetFetching: any
+    dispatchSetError: any
+    weather: any
+    location: LocationState
+    nightTheme: boolean
 }
 
 const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     navigation,
+    route,
     dispatchSetNightTheme,
     dispatchSetLatLng,
     dispatchSetLocationData,
@@ -50,77 +63,110 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     location,
     nightTheme,
 }) => {
+    const [refreshing, setRefreshing] = useState(false)
     const geoLocate = () =>
         Geolocation.getCurrentPosition(
-            pos => {
+            (pos) => {
                 if (pos.coords.latitude && pos.coords.longitude) {
-                    dispatchSetFetching();
-                    const lat = pos.coords.latitude;
-                    const lon = pos.coords.longitude;
-                    dispatchSetLatLng(lat, lon);
+                    dispatchSetFetching()
+                    const lat = pos.coords.latitude
+                    const lon = pos.coords.longitude
+                    dispatchSetLatLng(lat, lon)
                     apiFetch(API.WEATHER, {
                         lat,
                         lon,
-                        units: 'metric',
+                        units: "metric",
                     })
-                    .then(data => {
-                        dispatchSetLocationData(
-                            data.id,
-                            data.name,
-                        );
-                        dispatchSetCurrentWeather(data);
-                        dispatchSetNightTheme(!calcIsDay(data.sys.sunrise, data.sys.sunset, new Date()))
-                    })
-                        .catch(error => dispatchSetError(error));
+                        .then((data) => {
+                            dispatchSetLocationData(data.id, data.name)
+                            dispatchSetCurrentWeather(data)
+                            dispatchSetNightTheme(
+                                !calcIsDay(
+                                    data.sys.sunrise,
+                                    data.sys.sunset,
+                                    new Date()
+                                )
+                            )
+                        })
+                        .catch((error) => dispatchSetError(error))
                 }
             },
-            error => dispatchSetError(error),
-        );
+            (error) => dispatchSetError(error)
+        )
 
     const getPosition = () => {
         checkMultiple([
             PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
             PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
         ])
-            .then(statuses => {
+            .then((statuses) => {
                 const permission =
-                    Platform.OS === 'ios'
+                    Platform.OS === "ios"
                         ? statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE]
-                        : statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
+                        : statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]
                 switch (permission) {
                     case RESULTS.UNAVAILABLE:
                         console.log(
-                            'This feature is not available (on this device / in this context)',
-                        );
-                        break;
+                            "This feature is not available (on this device / in this context)"
+                        )
+                        break
                     case RESULTS.DENIED:
                         request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then(() =>
-                            geoLocate(),
-                        );
-                        break;
+                            geoLocate()
+                        )
+                        break
                     case RESULTS.GRANTED:
-                        geoLocate();
-                        break;
+                        geoLocate()
+                        break
                     case RESULTS.BLOCKED:
                         console.log(
-                            'The permission is denied and not requestable anymore',
-                        );
-                        break;
+                            "The permission is denied and not requestable anymore"
+                        )
+                        break
                 }
             })
-            .catch(error => dispatchSetError(error));
-    };
+            .catch((error) => dispatchSetError(error))
+    }
 
     useEffect(() => {
-        getPosition();
-    }, []);
+        if (!route.params.hasWeather) {
+            getPosition()
+        }
+    }, [])
 
-    const liveTime = new Date(useLiveClock());
+    useFocusEffect(
+        React.useCallback(() => {
+            if (!weather) {
+                console.log("navigated")
+                return () => getPosition()
+            }
+            return () => null
+        }, [])
+    )
+
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true)
+        try {
+            getPosition()
+            setTimeout(() => setRefreshing(false), 1000)
+        } catch (error) {
+            console.error(error)
+        }
+        setTimeout(() => setRefreshing(false), 1000)
+    }, [refreshing])
 
     return (
         <Screen navigation={navigation} hasSearch nightTheme={nightTheme}>
-            <View>
-                {location.lat ? (
+            <ScrollView
+                style={{ flexGrow: 1, height: "100%" }}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+            >
+                {weather && location ? (
                     <Location
                         weather={weather}
                         location={location}
@@ -130,52 +176,55 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                     <TouchableHighlight
                         onPress={() =>
                             openSettings().catch(() =>
-                                console.warn('cannot open settings'),
+                                console.warn("cannot open settings")
                             )
-                        }>
+                        }
+                    >
                         <Text
                             style={{
-                                color: nightTheme ? '#000' : '#fff',
-                                textAlign: 'center',
-                            }}>
+                                color: nightTheme ? "#fff" : "#000",
+                                textAlign: "center",
+                            }}
+                        >
                             Allow WeatherApp to use location services
                         </Text>
                     </TouchableHighlight>
                 )}
-            </View>
+            </ScrollView>
         </Screen>
-    );
-};
+    )
+}
 
 const mapStateToProps = (state: RootState) => {
     return {
-        sunRise: state.location?.weather?.sun_rise || new Date(new Date().setHours(5,0,0,0)).toISOString(),
-        sunSet: state.location?.weather?.sun_set || new Date(new Date().setHours(20,0,0,0)).toISOString(),
+        sunRise:
+            state.location?.weather?.sun_rise ||
+            new Date(new Date().setHours(5, 0, 0, 0)).toISOString(),
+        sunSet:
+            state?.location?.weather?.sun_set ||
+            new Date(new Date().setHours(20, 0, 0, 0)).toISOString(),
         weather: state.location?.weather,
         location: state.location,
         fetching: state.location?.fetching,
         nightTheme: state.theme?.nightTheme,
-    };
-};
+    }
+}
 
 const mapDispatchToProps = (dispatch: any) => ({
     dispatchSetNightTheme: (nightTheme: boolean) => {
-        dispatch(ACTIONS.setNightTheme(nightTheme));
+        dispatch(ACTIONS.setNightTheme(nightTheme))
     },
     dispatchSetLatLng: (lat: number, lon: number) => {
-        dispatch(ACTIONS.setLatLng(lat, lon));
+        dispatch(ACTIONS.setLatLng(lat, lon))
     },
     dispatchSetLocationData: (woeid: number, name: string) => {
-        dispatch(ACTIONS.setLocationData(woeid, name));
+        dispatch(ACTIONS.setLocationData(woeid, name))
     },
     dispatchSetCurrentWeather: (weather: any) => {
-        dispatch(ACTIONS.setCurrentWeather(weather));
+        dispatch(ACTIONS.setCurrentWeather(weather))
     },
     dispatchSetFetching: () => dispatch(ACTIONS.setFetching()),
     dispatchSetError: (error: string) => dispatch(ACTIONS.setError(error)),
-});
+})
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(HomeScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
