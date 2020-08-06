@@ -1,19 +1,21 @@
-import React, { FunctionComponent } from 'react';
-import { SafeAreaView, StyleSheet, View, Text, StatusBar } from 'react-native';
+import React, { FunctionComponent } from "react"
+import { SafeAreaView, StyleSheet, View, Text, StatusBar } from "react-native"
+import LinearGradient from "react-native-linear-gradient"
 import {
     NavigationParams,
     NavigationScreenProp,
     NavigationState,
-} from 'react-navigation';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+} from "react-navigation"
+import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 
-import { Row } from '../primitives';
+import { Row } from "../primitives"
+import Theme from "../theme"
 
 interface ScreenProps {
-    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
-    light?: boolean;
-    hasSearch?: boolean;
-    nightTheme: boolean;
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>
+    light?: boolean
+    hasSearch?: boolean
+    nightTheme: boolean
 }
 
 const Screen: FunctionComponent<ScreenProps> = ({
@@ -25,33 +27,44 @@ const Screen: FunctionComponent<ScreenProps> = ({
 }) => {
     const styles = StyleSheet.create({
         safeAreaView: {
-            backgroundColor: light || !nightTheme ? '#fff' : '#223B51',
-            height: '100%',
+            backgroundColor:
+                light || !nightTheme
+                    ? Theme.Colours.LightBlue_dark
+                    : Theme.Colours.LightBlue_dark,
+            height: "100%",
         },
         rowStyles: {
-            justifyContent: 'space-between',
+            justifyContent: "space-between",
             padding: 12,
         },
         navItem: {
-            color: nightTheme ? '#fff' : '#000',
+            color: "#fff",
         },
-    });
+    })
     return (
         <SafeAreaView style={styles.safeAreaView}>
-            <StatusBar barStyle="light-content" />
-            <View>
-                {hasSearch && (
-                    <Row style={styles.rowStyles}>
-                        <TouchableWithoutFeedback
-                            onPress={() => navigation.navigate('Search')}>
-                            <Text style={styles.navItem}>Search</Text>
-                        </TouchableWithoutFeedback>
-                    </Row>
-                )}
-                {children}
-            </View>
+            <LinearGradient
+                colors={[
+                    Theme.Colours.LightBlue_dark,
+                    Theme.Colours.LightBlue_darker,
+                ]}
+            >
+                <StatusBar barStyle="light-content" />
+                <View>
+                    {hasSearch && (
+                        <Row style={styles.rowStyles}>
+                            <TouchableWithoutFeedback
+                                onPress={() => navigation.navigate("Search")}
+                            >
+                                <Text style={styles.navItem}>Search</Text>
+                            </TouchableWithoutFeedback>
+                        </Row>
+                    )}
+                    {children}
+                </View>
+            </LinearGradient>
         </SafeAreaView>
-    );
-};
+    )
+}
 
-export default Screen;
+export default Screen

@@ -1,10 +1,12 @@
 import React, {
     useEffect,
     useState,
+    useRef,
     useCallback,
     FunctionComponent,
 } from "react"
 import {
+    AppState,
     Platform,
     RefreshControl,
     ScrollView,
@@ -19,6 +21,7 @@ import {
     checkMultiple,
     request,
     openSettings,
+    check,
 } from "react-native-permissions"
 import {
     NavigationParams,
@@ -63,7 +66,30 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     location,
     nightTheme,
 }) => {
+    const appState = useRef(AppState.currentState)
+    const [appStateVisible, setAppStateVisible] = useState(appState.current)
     const [refreshing, setRefreshing] = useState(false)
+    useEffect(() => {
+        AppState.addEventListener("change", _handleAppStateChange)
+
+        return () => {
+            AppState.removeEventListener("change", _handleAppStateChange)
+        }
+    }, [])
+
+    const _handleAppStateChange = (nextAppState: any) => {
+        if (
+            !weather &&
+            appState.current.match(/inactive|background/) &&
+            nextAppState === "active"
+        ) {
+            // getPosition()
+        }
+
+        appState.current = nextAppState
+        setAppStateVisible(appState.current)
+        console.log("AppState", appState.current)
+    }
     const geoLocate = () =>
         Geolocation.getCurrentPosition(
             (pos) => {
@@ -111,9 +137,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                         )
                         break
                     case RESULTS.DENIED:
-                        request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then(() =>
-                            geoLocate()
-                        )
+                        navigation.navigate("Search")
                         break
                     case RESULTS.GRANTED:
                         geoLocate()
@@ -133,16 +157,6 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
             getPosition()
         }
     }, [])
-
-    useFocusEffect(
-        React.useCallback(() => {
-            if (!weather) {
-                console.log("navigated")
-                return () => getPosition()
-            }
-            return () => null
-        }, [])
-    )
 
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
@@ -175,14 +189,14 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                 ) : (
                     <TouchableHighlight
                         onPress={() =>
-                            openSettings().catch(() =>
-                                console.warn("cannot open settings")
+                            request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then(
+                                () => getPosition
                             )
                         }
                     >
                         <Text
                             style={{
-                                color: nightTheme ? "#fff" : "#000",
+                                color: "#fff",
                                 textAlign: "center",
                             }}
                         >

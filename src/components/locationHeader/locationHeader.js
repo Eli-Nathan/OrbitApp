@@ -1,28 +1,28 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React from "react"
+import { StyleSheet, View, Text } from "react-native"
 
-import Theme from '../../theme';
+import Theme from "../../theme"
 
-const LocationHeader = props => {
+const LocationHeader = (props) => {
     return (
         <View styles={styles.headerView}>
             <Text style={styles.headerViewTextStyle}>{props.location}</Text>
         </View>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     headerView: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingTop: 12,
-        paddingBottom: 12,
+        justifyContent: "center",
+        alignItems: "center",
     },
     headerViewTextStyle: {
+        fontSize: 28,
         color: Theme.Colours.White,
-        textAlign: 'center',
-        fontWeight: 'bold',
+        textAlign: "center",
+        fontWeight: "bold",
+        marginBottom: 6,
     },
-});
+})
 
-export default LocationHeader;
+export default LocationHeader

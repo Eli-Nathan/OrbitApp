@@ -38,7 +38,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Always AND When in use - using location</string>
+	<string>Location services used to get weather data for your current location.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Always using location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
