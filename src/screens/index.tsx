@@ -32,6 +32,8 @@ const Screen: FunctionComponent<ScreenProps> = ({
                     ? Theme.Colours.LightBlue_dark
                     : Theme.Colours.LightBlue_dark,
             height: "100%",
+            flexGrow: 1,
+            display: "flex",
         },
         rowStyles: {
             justifyContent: "space-between",
@@ -48,6 +50,7 @@ const Screen: FunctionComponent<ScreenProps> = ({
                     Theme.Colours.LightBlue_dark,
                     Theme.Colours.LightBlue_darker,
                 ]}
+                style={{ flexGrow: 1 }}
             >
                 <StatusBar barStyle="light-content" />
                 <View>
