@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react"
-import { StyleSheet, ScrollView, View } from "react-native"
-import moment from "moment"
+import React from "react"
+import { StyleSheet, View } from "react-native"
 
-import Theme from "../../theme"
-import { Row, Column, Text } from "../../primitives"
+import { Column, Text } from "../../primitives"
 import LocationHeader from "../locationHeader/locationHeader"
 import useLiveClock from "../../hooks/useLiveClock"
 

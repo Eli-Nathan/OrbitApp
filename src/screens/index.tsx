@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react"
-import { SafeAreaView, StyleSheet, View, Text, StatusBar } from "react-native"
+import { SafeAreaView, StyleSheet, View, StatusBar } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import {
     NavigationParams,
@@ -8,7 +8,7 @@ import {
 } from "react-navigation"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 
-import { Row } from "../primitives"
+import { Row, Text } from "../primitives"
 import Theme from "../theme"
 
 interface ScreenProps {

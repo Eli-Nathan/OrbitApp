@@ -1,60 +1,60 @@
-import React, { useState, FunctionComponent } from 'react';
-import { Text, TextInput, StyleSheet } from 'react-native';
+import React, { useState, FunctionComponent } from "react"
+import { TextInput, StyleSheet } from "react-native"
 import {
     NavigationParams,
     NavigationScreenProp,
     NavigationState,
-} from 'react-navigation';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+} from "react-navigation"
+import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 
-import { Row } from '../primitives';
-import Screen from '.';
-import apiFetch from '../hooks/apiFetch';
-import { API } from '../constants/api';
-import SearchResults from '../components/searchResults/SearchResults';
+import { Row, Text } from "../primitives"
+import Screen from "."
+import apiFetch from "../hooks/apiFetch"
+import { API } from "../constants/api"
+import SearchResults from "../components/searchResults/SearchResults"
 
 interface SearchScreenProps {
-    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>
 }
 
 const SearchScreen: FunctionComponent<SearchScreenProps> = ({ navigation }) => {
-    const [searchValue, setSearchValue] = useState('Search...');
-    const [fetching, setFetching] = useState(false);
-    const [typingTimeout, setTypingTimeout] = useState(() => 0);
-    const [searchResults, setSearchResults] = useState([]);
+    const [searchValue, setSearchValue] = useState("Search...")
+    const [fetching, setFetching] = useState(false)
+    const [typingTimeout, setTypingTimeout] = useState(() => 0)
+    const [searchResults, setSearchResults] = useState([])
 
     const generatePlaceholder = () => {
-        let placeholder;
+        let placeholder
         if (searchValue.length === 0) {
-            placeholder = 'Search for your city';
+            placeholder = "Search for your city"
         } else if (searchResults.length === 0) {
-            placeholder = 'No cities found';
+            placeholder = "No cities found"
         }
-        return placeholder;
-    };
+        return placeholder
+    }
 
     const search = (query: string) => {
-        setSearchValue(query);
-        setFetching(true);
+        setSearchValue(query)
+        setFetching(true)
         if (typingTimeout) {
-            clearTimeout(typingTimeout);
+            clearTimeout(typingTimeout)
         }
 
         setTypingTimeout(() => {
             return setTimeout(() => {
-                setSearchValue(query);
+                setSearchValue(query)
                 apiFetch(`${API.LOCATION}`, { query })
-                    .then(data => {
-                        setFetching(false);
-                        setSearchResults(data);
+                    .then((data) => {
+                        setFetching(false)
+                        setSearchResults(data)
                     })
                     .catch(() => {
-                        setFetching(false);
-                        setSearchResults([]);
-                    });
-            }, 500);
-        });
-    };
+                        setFetching(false)
+                        setSearchResults([])
+                    })
+            }, 500)
+        })
+    }
     return (
         <Screen navigation={navigation} nightTheme={false} light>
             <Row style={styles.rowStyles}>
@@ -66,16 +66,16 @@ const SearchScreen: FunctionComponent<SearchScreenProps> = ({ navigation }) => {
                 <TextInput
                     style={{
                         height: 40,
-                        borderColor: '#000',
-                        color: '#000',
+                        borderColor: "#000",
+                        color: "#000",
                         borderWidth: 1,
                         paddingLeft: 6,
-                        width: '100%',
+                        width: "100%",
                         borderRadius: 8,
                     }}
                     autoFocus
-                    onFocus={() => setSearchValue('')}
-                    onChangeText={text => search(text)}
+                    onFocus={() => setSearchValue("")}
+                    onChangeText={(text) => search(text)}
                     value={searchValue}
                 />
             </Row>
@@ -87,18 +87,18 @@ const SearchScreen: FunctionComponent<SearchScreenProps> = ({ navigation }) => {
                 fetching={fetching}
             />
         </Screen>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     rowStyles: {
-        alignItems: 'center',
-        display: 'flex',
+        alignItems: "center",
+        display: "flex",
         padding: 12,
     },
     navItem: {
-        color: '#000',
+        color: "#000",
     },
-});
+})
 
-export default SearchScreen;
+export default SearchScreen

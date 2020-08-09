@@ -1,13 +1,13 @@
-import React from 'react';
-import { StyleSheet, ScrollView, ViewStyle, Text, Button } from 'react-native';
+import React from "react"
+import { StyleSheet, ScrollView, ViewStyle } from "react-native"
 
-import Locale from '../locale/Locale';
-import Weather from '../weather/Weather';
+import Locale from "../locale/Locale"
+import Weather from "../weather/Weather"
 
 interface LocationProps {
-    weather: any;
-    location: any;
-    nightTheme: boolean;
+    weather: any
+    location: any
+    nightTheme: boolean
 }
 
 const Location = (props: LocationProps) => {
@@ -26,19 +26,19 @@ const Location = (props: LocationProps) => {
                 </ScrollView>
             )}
         </>
-    );
-};
+    )
+}
 
 interface Styles {
-    locationDisplay: ViewStyle;
+    locationDisplay: ViewStyle
 }
 
 const styles: any = StyleSheet.create<Styles>({
     locationDisplay: {
-        display: 'flex',
-        color: '#fff',
-        width: '100%',
+        display: "flex",
+        color: "#fff",
+        width: "100%",
     },
-});
+})
 
-export default Location;
+export default Location
