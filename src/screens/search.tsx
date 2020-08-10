@@ -20,7 +20,7 @@ interface SearchScreenProps {
 const SearchScreen: FunctionComponent<SearchScreenProps> = ({ navigation }) => {
     const [searchValue, setSearchValue] = useState("Search...")
     const [fetching, setFetching] = useState(false)
-    const [typingTimeout, setTypingTimeout] = useState(() => 0)
+    const [typingTimeout, setTypingTimeout] = useState<any>(() => 0)
     const [searchResults, setSearchResults] = useState([])
 
     const generatePlaceholder = () => {

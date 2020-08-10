@@ -43,7 +43,7 @@ interface HomeScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
     route: any
     dispatchSetNightTheme: any
-    dispatchSetLatLng: any
+    dispatchSetLatLon: any
     dispatchSetLocationData: any
     dispatchSetCurrentWeather: any
     dispatchSetFetching: any
@@ -57,7 +57,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     navigation,
     route,
     dispatchSetNightTheme,
-    dispatchSetLatLng,
+    dispatchSetLatLon,
     dispatchSetLocationData,
     dispatchSetCurrentWeather,
     dispatchSetFetching,
@@ -97,7 +97,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                     dispatchSetFetching()
                     const lat = pos.coords.latitude
                     const lon = pos.coords.longitude
-                    dispatchSetLatLng(lat, lon)
+                    dispatchSetLatLon(lat, lon)
                     apiFetch(API.WEATHER, {
                         lat,
                         lon,
@@ -108,8 +108,8 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                             dispatchSetCurrentWeather(data)
                             dispatchSetNightTheme(
                                 !calcIsDay(
-                                    data.sys.sunrise,
-                                    data.sys.sunset,
+                                    data.current.sunrise,
+                                    data.current.sunset,
                                     new Date()
                                 )
                             )
@@ -210,17 +210,20 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
 }
 
 const mapStateToProps = (state: RootState) => {
+    const location = state.location
+    const { currentWeather, fetching } = location
+    const { nightTheme } = state.theme
     return {
         sunRise:
-            state.location?.weather?.sun_rise ||
+            currentWeather?.sunrise ||
             new Date(new Date().setHours(5, 0, 0, 0)).toISOString(),
         sunSet:
-            state?.location?.weather?.sun_set ||
+            currentWeather?.sunset ||
             new Date(new Date().setHours(20, 0, 0, 0)).toISOString(),
-        weather: state.location?.weather,
-        location: state.location,
-        fetching: state.location?.fetching,
-        nightTheme: state.theme?.nightTheme,
+        currentWeather: currentWeather,
+        location: location,
+        fetching: fetching,
+        nightTheme: nightTheme || false,
     }
 }
 
@@ -228,8 +231,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatchSetNightTheme: (nightTheme: boolean) => {
         dispatch(ACTIONS.setNightTheme(nightTheme))
     },
-    dispatchSetLatLng: (lat: number, lon: number) => {
-        dispatch(ACTIONS.setLatLng(lat, lon))
+    dispatchSetLatLon: (lat: number, lon: number) => {
+        dispatch(ACTIONS.setLatLon(lat, lon))
     },
     dispatchSetLocationData: (woeid: number, name: string) => {
         dispatch(ACTIONS.setLocationData(woeid, name))

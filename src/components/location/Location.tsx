@@ -2,7 +2,7 @@ import React from "react"
 import { StyleSheet, ScrollView, ViewStyle } from "react-native"
 
 import Locale from "../locale/Locale"
-import Weather from "../weather/Weather"
+import Weather from "../weather"
 
 interface LocationProps {
     weather: any
@@ -19,10 +19,7 @@ const Location = (props: LocationProps) => {
                         nightTheme={props.nightTheme}
                         userLocation={props.location}
                     />
-                    <Weather
-                        currentWeather={props.weather}
-                        nightTheme={props.nightTheme}
-                    />
+                    <Weather currentWeather={props.weather} />
                 </ScrollView>
             )}
         </>
