@@ -35,10 +35,7 @@ const Locale = (props: LocaleProps) => {
 
 const styles: any = StyleSheet.create({
     colStyle: {
-        margin: 12,
         flex: 1,
-        display: "flex",
-        borderRadius: 8,
         textAlign: "center",
         alignItems: "center",
     },

@@ -5,7 +5,9 @@ import Locale from "../locale/Locale"
 import Weather from "../weather"
 
 interface LocationProps {
-    weather: any
+    currentWeather: any
+    hourlyWeather: any
+    dailyWeather: any
     location: any
     nightTheme: boolean
 }
@@ -13,13 +15,17 @@ interface LocationProps {
 const Location = (props: LocationProps) => {
     return (
         <>
-            {!props.weather ? null : (
+            {!props.currentWeather ? null : (
                 <ScrollView style={styles.locationDisplay}>
                     <Locale
                         nightTheme={props.nightTheme}
                         userLocation={props.location}
                     />
-                    <Weather currentWeather={props.weather} />
+                    <Weather
+                        currentWeather={props.currentWeather}
+                        hourlyWeather={props.hourlyWeather}
+                        dailyWeather={props.dailyWeather}
+                    />
                 </ScrollView>
             )}
         </>

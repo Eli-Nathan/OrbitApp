@@ -1,36 +1,30 @@
 import React, { FunctionComponent } from "react"
-import { StyleSheet, Image } from "react-native"
+import { StyleSheet, View } from "react-native"
 
 import WeatherIcon from "../weatherIcon"
-import { API } from "../../constants/api"
 import { parseTemp } from "../../utils/strings"
-import { Column, Text } from "../../primitives"
+import { Column, Text, Row } from "../../primitives"
 
 interface WeatherProps {
     currentWeather: any
 }
-
-const renderIcon = (code: string) => (
-    <Image
-        source={{ uri: `${API.ICON}${code}@4x.png` }}
-        style={{ width: 225, height: 225 }}
-    />
-)
 
 const CurrentWeather: FunctionComponent<WeatherProps> = ({
     currentWeather,
 }) => {
     return (
         <Column style={styles.colStyle}>
-            <WeatherIcon code={`${currentWeather.weather[0].icon}`} />
+            <WeatherIcon large code={`${currentWeather.weather[0].icon}`} />
             <Text style={{ ...styles.textCenter, ...styles.today }}>Today</Text>
-            <Text style={{ ...styles.textCenter, ...styles.temp }}>
-                {parseTemp(currentWeather?.main?.temp)}
+            <Row>
+                <Text style={{ ...styles.textCenter, ...styles.temp }}>
+                    {parseTemp(currentWeather?.temp)}
+                </Text>
                 <Text style={{ ...styles.textCenter, ...styles.tempSmall }}>
                     °c
                 </Text>
-            </Text>
-            <Text style={styles.textCenter}>
+            </Row>
+            <Text style={{ ...styles.textCenter, ...styles.weatherString }}>
                 {currentWeather?.weather[0].main}
             </Text>
         </Column>
@@ -39,7 +33,6 @@ const CurrentWeather: FunctionComponent<WeatherProps> = ({
 
 const styles: any = StyleSheet.create({
     colStyle: {
-        margin: 12,
         flex: 1,
         display: "flex",
         borderRadius: 8,
@@ -57,6 +50,13 @@ const styles: any = StyleSheet.create({
     tempSmall: {
         fontWeight: "normal",
         fontSize: 40,
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+        marginTop: 6,
+    },
+    weatherString: {
+        fontSize: 22,
+        marginBottom: 12,
     },
     today: {
         fontSize: 28,

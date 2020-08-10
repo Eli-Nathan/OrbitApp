@@ -1,5 +1,3 @@
-export const appendDegrees = (str: string): string => `${str}`
-
 export const parseTemp = (temp: number): string => {
-    return appendDegrees(`${Math.round(temp)}`)
+    return Math.round(temp).toString()
 }

@@ -20,15 +20,12 @@ import {
     RESULTS,
     checkMultiple,
     request,
-    openSettings,
-    check,
 } from "react-native-permissions"
 import {
     NavigationParams,
     NavigationScreenProp,
     NavigationState,
 } from "react-navigation"
-import { useFocusEffect } from "@react-navigation/native"
 
 import Screen from ".."
 import Location from "../../components/location/Location"
@@ -48,7 +45,9 @@ interface HomeScreenProps {
     dispatchSetCurrentWeather: any
     dispatchSetFetching: any
     dispatchSetError: any
-    weather: any
+    currentWeather: any
+    hourlyWeather: any
+    dailyWeather: any
     location: LocationState
     nightTheme: boolean
 }
@@ -62,7 +61,9 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     dispatchSetCurrentWeather,
     dispatchSetFetching,
     dispatchSetError,
-    weather,
+    currentWeather,
+    hourlyWeather,
+    dailyWeather,
     location,
     nightTheme,
 }) => {
@@ -79,7 +80,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
 
     const _handleAppStateChange = (nextAppState: any) => {
         if (
-            !weather &&
+            !currentWeather &&
             appState.current.match(/inactive|background/) &&
             nextAppState === "active"
         ) {
@@ -88,7 +89,6 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
 
         appState.current = nextAppState
         setAppStateVisible(appState.current)
-        console.log("AppState", appState.current)
     }
     const geoLocate = () =>
         Geolocation.getCurrentPosition(
@@ -98,21 +98,28 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                     const lat = pos.coords.latitude
                     const lon = pos.coords.longitude
                     dispatchSetLatLon(lat, lon)
-                    apiFetch(API.WEATHER, {
-                        lat,
-                        lon,
-                        units: "metric",
+                    apiFetch(API.LOCATION, {
+                        lattlong: `${lat},${lon}`,
                     })
-                        .then((data) => {
-                            dispatchSetLocationData(data.id, data.name)
-                            dispatchSetCurrentWeather(data)
-                            dispatchSetNightTheme(
-                                !calcIsDay(
-                                    data.current.sunrise,
-                                    data.current.sunset,
-                                    new Date()
-                                )
+                        .then(async (data) => {
+                            dispatchSetLocationData(
+                                data[0].woeid,
+                                data[0].title
                             )
+                            await apiFetch(API.WEATHER, {
+                                lat,
+                                lon,
+                                units: "metric",
+                            }).then((weatherData) => {
+                                dispatchSetCurrentWeather(weatherData)
+                                dispatchSetNightTheme(
+                                    !calcIsDay(
+                                        weatherData.current.sunrise,
+                                        weatherData.current.sunset,
+                                        new Date()
+                                    )
+                                )
+                            })
                         })
                         .catch((error) => dispatchSetError(error))
                 }
@@ -180,9 +187,11 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                     />
                 }
             >
-                {weather && location ? (
+                {currentWeather && location ? (
                     <Location
-                        weather={weather}
+                        currentWeather={currentWeather}
+                        hourlyWeather={hourlyWeather}
+                        dailyWeather={dailyWeather}
                         location={location}
                         nightTheme={nightTheme}
                     />
@@ -211,8 +220,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
 
 const mapStateToProps = (state: RootState) => {
     const location = state.location
-    const { currentWeather, fetching } = location
-    const { nightTheme } = state.theme
+    const { currentWeather, hourlyWeather, dailyWeather, fetching } = location
     return {
         sunRise:
             currentWeather?.sunrise ||
@@ -221,9 +229,11 @@ const mapStateToProps = (state: RootState) => {
             currentWeather?.sunset ||
             new Date(new Date().setHours(20, 0, 0, 0)).toISOString(),
         currentWeather: currentWeather,
+        hourlyWeather: hourlyWeather,
+        dailyWeather: dailyWeather,
         location: location,
         fetching: fetching,
-        nightTheme: nightTheme || false,
+        nightTheme: state.theme?.nightTheme || false,
     }
 }
 

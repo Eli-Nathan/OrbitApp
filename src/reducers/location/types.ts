@@ -13,5 +13,5 @@ export interface LocationState {
 
 export interface LocationStateAction {
     type: string
-    payload?: LocationState
+    payload?: any
 }

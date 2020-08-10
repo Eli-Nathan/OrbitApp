@@ -5,13 +5,17 @@ import { API } from "../../constants/api"
 
 interface IconProps {
     code: string
+    large?: boolean
 }
 
-const renderIcon: FunctionComponent<IconProps> = ({ code }) => (
-    <Image
-        source={{ uri: `${API.ICON}${code}@4x.png` }}
-        style={{ width: 225, height: 225 }}
-    />
-)
+const renderIcon: FunctionComponent<IconProps> = ({ code, large }) => {
+    const size = large ? 200 : 60
+    return (
+        <Image
+            source={{ uri: `${API.ICON}${code}@4x.png` }}
+            style={{ width: size, height: size }}
+        />
+    )
+}
 
 export default renderIcon

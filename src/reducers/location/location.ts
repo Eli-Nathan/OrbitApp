@@ -40,9 +40,9 @@ export const locationReducer = (
         case SET_CURRENT_WEATHER:
             return {
                 ...state,
-                currentWeather: action.payload?.currentWeather,
-                hourlyWeather: action.payload?.hourlyWeather,
-                dailyWeather: action.payload?.dailyWeather,
+                currentWeather: action.payload?.weather?.current,
+                hourlyWeather: action.payload?.weather?.hourly,
+                dailyWeather: action.payload?.weather?.daily,
                 fetching: false,
                 error: null,
             }

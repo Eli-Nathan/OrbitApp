@@ -44,14 +44,14 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
     dispatchSetNightTheme,
     dispatchSetError,
 }) => {
-    const loadNewLocation = (location: string) => {
+    const loadNewLocation = (result: any) => {
+        dispatchSetLocationData(result.woeid, result.title)
         apiFetch(API.WEATHER, {
             lat,
             lon,
             units: "metric",
         })
             .then((data) => {
-                dispatchSetLocationData(data.id, data.name)
                 dispatchSetCurrentWeather(data)
                 dispatchSetNightTheme(
                     !calcIsDay(
@@ -89,7 +89,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
         results.slice(0, 5).map((result: any) => (
             <View style={styles.result} key={`${result.woeid}`}>
                 <TouchableWithoutFeedback
-                    onPress={() => loadNewLocation(result.title)}
+                    onPress={() => loadNewLocation(result)}
                     hitSlop={{ top: 20, bottom: 20, left: 14, right: 14 }}
                 >
                     <Text>{getHighlightedText(result.title, query)}</Text>

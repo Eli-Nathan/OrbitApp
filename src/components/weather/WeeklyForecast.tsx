@@ -7,7 +7,7 @@ import { parseTemp } from "../../utils/strings"
 import { Column, Text } from "../../primitives"
 
 interface WeeklyForecastProps {
-    currentWeather: any
+    dailyWeather: any
 }
 
 const renderIcon = (code: string) => (
@@ -18,21 +18,11 @@ const renderIcon = (code: string) => (
 )
 
 const WeeklyForecast: FunctionComponent<WeeklyForecastProps> = ({
-    currentWeather,
+    dailyWeather,
 }) => {
     return (
         <Column style={styles.colStyle}>
-            <WeatherIcon code={`${currentWeather.weather[0].icon}`} />
-            <Text style={{ ...styles.textCenter, ...styles.today }}>Today</Text>
-            <Text style={{ ...styles.textCenter, ...styles.temp }}>
-                {parseTemp(currentWeather?.main?.temp)}
-                <Text style={{ ...styles.textCenter, ...styles.tempSmall }}>
-                    °c
-                </Text>
-            </Text>
-            <Text style={styles.textCenter}>
-                {currentWeather?.weather[0].main}
-            </Text>
+            <Text style={styles.textCenter}>Daily weather ken</Text>
         </Column>
     )
 }

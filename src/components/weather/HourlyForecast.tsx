@@ -6,94 +6,106 @@ import { parseTemp } from "../../utils/strings"
 import { Column, Row, Text } from "../../primitives"
 
 interface HourlyForecastProps {
-    currentWeather: any
+    hourlyWeather: any
 }
 
-const hourBlock: FunctionComponent<any> = () => {}
+interface HourBlockProps {
+    key: number
+    weather: any
+    time: number
+    temp: number
+}
+
+const HourBlock: FunctionComponent<HourBlockProps> = ({
+    weather,
+    time,
+    temp,
+}) => (
+    <Column style={styles.colStyle}>
+        <Text style={{ ...styles.textCenter, ...styles.today }}>
+            {new Date(time * 1000).getHours("H")}:00
+        </Text>
+        <WeatherIcon code={`${weather.icon}`} />
+        <Row>
+            <Text style={{ ...styles.textCenter, ...styles.temp }}>
+                {parseTemp(temp)}
+            </Text>
+            <Text style={{ ...styles.textCenter, ...styles.tempSmall }}>
+                °c
+            </Text>
+        </Row>
+    </Column>
+)
 
 const HourlyForecast: FunctionComponent<HourlyForecastProps> = ({
-    currentWeather,
+    hourlyWeather,
 }) => {
+    const renderHours = () => {
+        return hourlyWeather
+            .splice(0, 12)
+            .map((hour: any) => (
+                <HourBlock
+                    key={hour.dt}
+                    weather={hour.weather[0]}
+                    time={hour.dt}
+                    temp={hour.temp}
+                />
+            ))
+    }
     return (
         <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             decelerationRate="fast"
+            style={styles.scrollStyle}
         >
-            <Column style={styles.colStyle}>
-                <WeatherIcon code={`${currentWeather.weather[0].icon}`} />
-                <Text style={{ ...styles.textCenter, ...styles.today }}>
-                    Today
-                </Text>
-                <Text style={{ ...styles.textCenter, ...styles.temp }}>
-                    {parseTemp(currentWeather?.main?.temp)}
-                    <Text style={{ ...styles.textCenter, ...styles.tempSmall }}>
-                        °c
-                    </Text>
-                </Text>
-                <Text style={styles.textCenter}>
-                    {currentWeather?.weather[0].main}
-                </Text>
-            </Column>
-            <Column>
-                <WeatherIcon code={`${currentWeather.weather[0].icon}`} />
-                <Text style={{ ...styles.textCenter, ...styles.today }}>
-                    Today
-                </Text>
-                <Text style={{ ...styles.textCenter, ...styles.temp }}>
-                    {parseTemp(currentWeather?.main?.temp)}
-                    <Text style={{ ...styles.textCenter, ...styles.tempSmall }}>
-                        °c
-                    </Text>
-                </Text>
-                <Text style={styles.textCenter}>
-                    {currentWeather?.weather[0].main}
-                </Text>
-            </Column>
-            <Column>
-                <WeatherIcon code={`${currentWeather.weather[0].icon}`} />
-                <Text style={{ ...styles.textCenter, ...styles.today }}>
-                    Today
-                </Text>
-                <Text style={{ ...styles.textCenter, ...styles.temp }}>
-                    {parseTemp(currentWeather?.main?.temp)}
-                    <Text style={{ ...styles.textCenter, ...styles.tempSmall }}>
-                        °c
-                    </Text>
-                </Text>
-                <Text style={styles.textCenter}>
-                    {currentWeather?.weather[0].main}
-                </Text>
-            </Column>
+            {renderHours()}
         </ScrollView>
     )
 }
 
 const styles: any = StyleSheet.create({
+    scrollStyle: {
+        paddingLeft: 18,
+        paddingRight: 18,
+    },
     colStyle: {
-        backgroundColor: "red",
-        margin: 12,
+        backgroundColor: "#fff",
+        shadowColor: "#7388A5",
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.16,
+        shadowRadius: 6.68,
+        elevation: 11,
+        margin: 6,
+        padding: 12,
+        width: 140,
         flex: 1,
         display: "flex",
-        borderRadius: 8,
+        borderRadius: 12,
         textAlign: "center",
         alignItems: "center",
     },
     textCenter: {
         textAlign: "center",
-        color: "#fff",
+        color: "#7388A5",
     },
     temp: {
-        fontSize: 68,
+        fontSize: 20,
         fontWeight: "bold",
     },
     tempSmall: {
         fontWeight: "normal",
-        fontSize: 40,
+        fontSize: 10,
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+        marginTop: 0,
     },
     today: {
-        fontSize: 28,
-        fontWeight: "bold",
+        fontSize: 16,
+        fontWeight: "normal",
     },
 })
 
