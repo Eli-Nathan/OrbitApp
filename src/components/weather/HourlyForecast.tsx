@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react"
-import { StyleSheet, ScrollView } from "react-native"
+import { StyleSheet, ScrollView, View } from "react-native"
 
 import WeatherIcon from "../weatherIcon"
 import { parseTemp } from "../../utils/strings"
@@ -23,7 +23,7 @@ const HourBlock: FunctionComponent<HourBlockProps> = ({
 }) => (
     <Column style={styles.colStyle}>
         <Text style={{ ...styles.textCenter, ...styles.today }}>
-            {new Date(time * 1000).getHours("H")}:00
+            {new Date(time * 1000).getHours()}:00
         </Text>
         <WeatherIcon code={`${weather.icon}`} />
         <Row>
@@ -42,7 +42,7 @@ const HourlyForecast: FunctionComponent<HourlyForecastProps> = ({
 }) => {
     const renderHours = () => {
         return hourlyWeather
-            .splice(0, 12)
+            .splice(1, 12)
             .map((hour: any) => (
                 <HourBlock
                     key={hour.dt}
@@ -60,6 +60,7 @@ const HourlyForecast: FunctionComponent<HourlyForecastProps> = ({
             style={styles.scrollStyle}
         >
             {renderHours()}
+            <View style={{ width: 30 }} />
         </ScrollView>
     )
 }

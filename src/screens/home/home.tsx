@@ -1,18 +1,20 @@
 import React, {
     useEffect,
     useState,
-    useRef,
     useCallback,
     FunctionComponent,
+    createRef,
 } from "react"
 import {
-    AppState,
     Platform,
     RefreshControl,
     ScrollView,
     Text,
     TouchableHighlight,
+    View,
 } from "react-native"
+import "react-native-gesture-handler"
+import BottomSheet from "reanimated-bottom-sheet"
 import { connect } from "react-redux"
 import Geolocation from "@react-native-community/geolocation"
 import {
@@ -28,6 +30,7 @@ import {
 } from "react-navigation"
 
 import Screen from ".."
+import { Row } from "../../primitives"
 import Location from "../../components/location/Location"
 import * as ACTIONS from "../../reducers/location/actions"
 import { API } from "../../constants/api"
@@ -35,6 +38,7 @@ import { RootState } from "../../reducers"
 import { calcIsDay } from "../../utils/dates"
 import { LocationState } from "../../reducers/location/types"
 import apiFetch from "../../hooks/apiFetch/apiFetch"
+import WeeklyForecast from "../../components/weather/WeeklyForecast"
 
 interface HomeScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -67,29 +71,9 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     location,
     nightTheme,
 }) => {
-    const appState = useRef(AppState.currentState)
-    const [appStateVisible, setAppStateVisible] = useState(appState.current)
+    let bottomSheetRef = createRef<BottomSheet>()
     const [refreshing, setRefreshing] = useState(false)
-    useEffect(() => {
-        AppState.addEventListener("change", _handleAppStateChange)
 
-        return () => {
-            AppState.removeEventListener("change", _handleAppStateChange)
-        }
-    }, [])
-
-    const _handleAppStateChange = (nextAppState: any) => {
-        if (
-            !currentWeather &&
-            appState.current.match(/inactive|background/) &&
-            nextAppState === "active"
-        ) {
-            // getPosition()
-        }
-
-        appState.current = nextAppState
-        setAppStateVisible(appState.current)
-    }
     const geoLocate = () =>
         Geolocation.getCurrentPosition(
             (pos) => {
@@ -112,6 +96,14 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                                 units: "metric",
                             }).then((weatherData) => {
                                 dispatchSetCurrentWeather(weatherData)
+                                console.log(
+                                    "shouldDispatch",
+                                    !calcIsDay(
+                                        weatherData.current.sunrise,
+                                        weatherData.current.sunset,
+                                        new Date()
+                                    )
+                                )
                                 dispatchSetNightTheme(
                                     !calcIsDay(
                                         weatherData.current.sunrise,
@@ -165,6 +157,43 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
         }
     }, [])
 
+    const renderContent = () => {
+        return (
+            <View
+                style={{
+                    backgroundColor: "#fff",
+                    paddingLeft: 30,
+                    paddingRight: 30,
+                    paddingBottom: 50,
+                }}
+            >
+                <WeeklyForecast dailyWeather={dailyWeather} />
+            </View>
+        )
+    }
+    const renderHeader = () => {
+        return (
+            <Row
+                style={{
+                    backgroundColor: "#fff",
+                    borderTopRightRadius: 16,
+                    borderTopLeftRadius: 16,
+                    justifyContent: "center",
+                    padding: 12,
+                }}
+            >
+                <View
+                    style={{
+                        backgroundColor: "#e5e5e5",
+                        borderRadius: 50,
+                        width: 40,
+                        height: 6,
+                    }}
+                ></View>
+            </Row>
+        )
+    }
+
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
         try {
@@ -191,7 +220,6 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                     <Location
                         currentWeather={currentWeather}
                         hourlyWeather={hourlyWeather}
-                        dailyWeather={dailyWeather}
                         location={location}
                         nightTheme={nightTheme}
                     />
@@ -214,6 +242,14 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                     </TouchableHighlight>
                 )}
             </ScrollView>
+            <BottomSheet
+                ref={bottomSheetRef}
+                initialSnap={1}
+                snapPoints={[530, 200]}
+                renderContent={renderContent}
+                renderHeader={renderHeader}
+                enabledBottomInitialAnimation={true}
+            />
         </Screen>
     )
 }

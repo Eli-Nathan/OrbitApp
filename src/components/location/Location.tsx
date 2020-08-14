@@ -1,13 +1,13 @@
 import React from "react"
-import { StyleSheet, ScrollView, ViewStyle } from "react-native"
+import { StyleSheet, View, ViewStyle, Text } from "react-native"
 
 import Locale from "../locale/Locale"
 import Weather from "../weather"
+// import BottomDrawer from "../bottomDrawer"
 
 interface LocationProps {
     currentWeather: any
     hourlyWeather: any
-    dailyWeather: any
     location: any
     nightTheme: boolean
 }
@@ -16,7 +16,7 @@ const Location = (props: LocationProps) => {
     return (
         <>
             {!props.currentWeather ? null : (
-                <ScrollView style={styles.locationDisplay}>
+                <View style={styles.locationDisplay}>
                     <Locale
                         nightTheme={props.nightTheme}
                         userLocation={props.location}
@@ -24,9 +24,8 @@ const Location = (props: LocationProps) => {
                     <Weather
                         currentWeather={props.currentWeather}
                         hourlyWeather={props.hourlyWeather}
-                        dailyWeather={props.dailyWeather}
                     />
-                </ScrollView>
+                </View>
             )}
         </>
     )
