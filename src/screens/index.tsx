@@ -10,6 +10,7 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 
 import { Row, Text } from "../primitives"
 import Theme from "../theme"
+import { IconSearch } from "../assets/icons"
 
 interface ScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -58,8 +59,16 @@ const Screen: FunctionComponent<ScreenProps> = ({
                         <Row style={styles.rowStyles}>
                             <TouchableWithoutFeedback
                                 onPress={() => navigation.navigate("Search")}
+                                style={{
+                                    backgroundColor: "#fff",
+                                    borderRadius: 100,
+                                }}
                             >
-                                <Text style={styles.navItem}>Search</Text>
+                                <IconSearch
+                                    width={40}
+                                    height={40}
+                                    viewBox={`0 0 160 160`}
+                                />
                             </TouchableWithoutFeedback>
                         </Row>
                     )}

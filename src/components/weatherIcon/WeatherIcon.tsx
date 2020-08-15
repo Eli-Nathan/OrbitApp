@@ -1,19 +1,35 @@
 import React, { FunctionComponent } from "react"
-import { Image } from "react-native"
 
-import { API } from "../../constants/api"
+import * as icons from "../../assets/icons"
 
 interface IconProps {
     code: string
     large?: boolean
+    small?: boolean
+    size?: boolean
 }
 
-const renderIcon: FunctionComponent<IconProps> = ({ code, large }) => {
-    const size = large ? 200 : 60
+const renderIcon: FunctionComponent<IconProps> = ({
+    code,
+    large,
+    small,
+    size,
+}) => {
+    const defaultSize = 60
+    const largeSize = 200
+    const smallSize = 40
+    const dimensions = large
+        ? largeSize
+        : small
+        ? smallSize
+        : size || defaultSize
+    const mappedIcon = icons.iconMap[code]
+    const WeatherIcon = icons[mappedIcon]
     return (
-        <Image
-            source={{ uri: `${API.ICON}${code}@4x.png` }}
-            style={{ width: size, height: size }}
+        <WeatherIcon
+            width={dimensions}
+            height={dimensions}
+            viewBox={`0 0 190 190`}
         />
     )
 }

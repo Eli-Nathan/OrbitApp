@@ -29,13 +29,19 @@ const DayBlock: FunctionComponent<DayBlockProps> = ({
             <Column style={styles.dayCol}>
                 <Text style={styles.dayText}>{day}</Text>
             </Column>
-            <Column style={styles.colStyle}>
-                <WeatherIcon code={icon} />
+            <Column style={styles.iconCol}>
+                <WeatherIcon code={icon} small />
             </Column>
             <Column style={styles.tempCol}>
                 <Row style={styles.tempRow}>
                     <Row>
-                        <Text style={{ ...styles.textCenter, ...styles.temp }}>
+                        <Text
+                            style={{
+                                ...styles.textCenter,
+                                ...styles.temp,
+                                ...styles.tempMax,
+                            }}
+                        >
                             {tempMax}
                         </Text>
                         <Text
@@ -52,13 +58,20 @@ const DayBlock: FunctionComponent<DayBlockProps> = ({
             <Column style={styles.tempCol}>
                 <Row style={styles.tempRow}>
                     <Row>
-                        <Text style={{ ...styles.textCenter, ...styles.temp }}>
+                        <Text
+                            style={{
+                                ...styles.textCenter,
+                                ...styles.temp,
+                                ...styles.tempMin,
+                            }}
+                        >
                             {tempMin}
                         </Text>
                         <Text
                             style={{
                                 ...styles.textCenter,
                                 ...styles.tempSmall,
+                                ...styles.tempMin,
                             }}
                         >
                             °c
@@ -94,8 +107,14 @@ const WeeklyForecast: FunctionComponent<WeeklyForecastProps> = ({
 }
 
 const styles: any = StyleSheet.create({
+    weatherRow: {
+        paddingTop: 12,
+        paddingBottom: 12,
+    },
     iconCol: {
-        width: "20%",
+        width: "15%",
+        alignItems: "center",
+        justifyContent: "center",
     },
     dayCol: {
         width: "40%",
@@ -121,12 +140,15 @@ const styles: any = StyleSheet.create({
         justifyContent: "flex-start",
         marginTop: 0,
     },
+    tempMin: {
+        color: "#96BBE6",
+    },
     today: {
         fontSize: 16,
         fontWeight: "normal",
     },
     tempRow: {
-        marginTop: 12,
+        marginTop: 0,
         justifyContent: "flex-end",
     },
 })
