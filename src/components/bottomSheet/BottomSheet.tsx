@@ -6,10 +6,12 @@ import { Row } from "../../primitives"
 import WeeklyForecast from "../../components/weather/WeeklyForecast"
 interface BottomDrawerProps {
     dailyWeather: any
+    snapPoints?: number[]
 }
 
 const BottomDrawer: FunctionComponent<BottomDrawerProps> = ({
     dailyWeather,
+    snapPoints,
 }) => {
     let bottomSheetRef = createRef<BottomSheet>()
     const renderContent = () => {
@@ -52,7 +54,7 @@ const BottomDrawer: FunctionComponent<BottomDrawerProps> = ({
         <BottomSheet
             ref={bottomSheetRef}
             initialSnap={1}
-            snapPoints={[550, 180]}
+            snapPoints={snapPoints || [580, 180]}
             renderContent={renderContent}
             renderHeader={renderHeader}
             enabledBottomInitialAnimation={true}

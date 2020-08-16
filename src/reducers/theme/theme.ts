@@ -2,7 +2,7 @@ import { SET_NIGHT_THEME } from "./actions"
 import { ThemeState, ThemeStateAction } from "./types"
 
 export const initialState = {
-    nightTheme: true,
+    nightTheme: false,
 }
 
 export const themeReducer = (

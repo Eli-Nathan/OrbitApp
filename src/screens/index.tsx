@@ -30,8 +30,8 @@ const Screen: FunctionComponent<ScreenProps> = ({
         safeAreaView: {
             backgroundColor:
                 light || !nightTheme
-                    ? Theme.Colours.LightBlue_dark
-                    : Theme.Colours.LightBlue_dark,
+                    ? Theme.Colours.LightBlue
+                    : Theme.Colours.DarkBlue,
             height: "100%",
             flexGrow: 1,
             display: "flex",
@@ -48,8 +48,12 @@ const Screen: FunctionComponent<ScreenProps> = ({
         <SafeAreaView style={styles.safeAreaView}>
             <LinearGradient
                 colors={[
-                    Theme.Colours.LightBlue_dark,
-                    Theme.Colours.LightBlue_darker,
+                    light || !nightTheme
+                        ? Theme.Colours.LightBlue
+                        : Theme.Colours.DarkBlue,
+                    light || !nightTheme
+                        ? Theme.Colours.LightBlue_light
+                        : Theme.Colours.DarkBlue_light,
                 ]}
                 style={{ flexGrow: 1 }}
             >

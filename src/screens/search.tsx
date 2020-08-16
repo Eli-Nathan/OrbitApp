@@ -66,7 +66,7 @@ const SearchScreen: FunctionComponent<SearchScreenProps> = ({ navigation }) => {
                 <TextInput
                     style={{
                         height: 40,
-                        borderColor: "#000",
+                        backgroundColor: "#fff",
                         color: "#000",
                         borderWidth: 1,
                         paddingLeft: 6,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         padding: 12,
     },
     navItem: {
-        color: "#000",
+        color: "#fff",
     },
 })
 

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import React, { useEffect, useState } from "react"
+import { Provider } from "react-redux"
+import { createStore, applyMiddleware } from "redux"
 import {
     SafeAreaView,
     StyleSheet,
@@ -10,32 +10,35 @@ import {
     Platform,
     TouchableHighlight,
     TextInput,
-} from 'react-native';
-import Geolocation from '@react-native-community/geolocation';
+} from "react-native"
+import Geolocation from "@react-native-community/geolocation"
 import {
     PERMISSIONS,
     RESULTS,
     checkMultiple,
     request,
     openSettings,
-} from 'react-native-permissions';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+} from "react-native-permissions"
+import { NavigationContainer } from "@react-navigation/native"
+import { createStackNavigator } from "@react-navigation/stack"
+import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 
-import rootReducer from './reducers';
-import { Row } from './primitives';
-import Screen from './screens';
-import HomeScreen from './screens/home/home';
-import SearchScreen from './screens/search';
-import Location from './components/location/Location';
+import rootReducer from "./reducers"
+import { Row } from "./primitives"
+import Screen from "./screens"
+import HomeScreen from "./screens/home/home"
+import SearchScreen from "./screens/search"
+import Location from "./components/location/Location"
 
-const store = createStore(
-    rootReducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ &&
-        window.__REDUX_DEVTOOLS_EXTENSION__(),
-);
-const Stack = createStackNavigator();
+const middlewares = []
+
+if (__DEV__) {
+    const createDebugger = require("redux-flipper").default
+    middlewares.push(createDebugger())
+}
+
+const store = createStore(rootReducer, applyMiddleware(...middlewares))
+const Stack = createStackNavigator()
 
 const App = () => {
     return (
@@ -44,7 +47,8 @@ const App = () => {
                 <Stack.Navigator
                     screenOptions={{
                         headerShown: false,
-                    }}>
+                    }}
+                >
                     <Stack.Screen
                         name="Home"
                         component={HomeScreen}
@@ -54,7 +58,7 @@ const App = () => {
                 </Stack.Navigator>
             </NavigationContainer>
         </Provider>
-    );
-};
+    )
+}
 
-export default App;
+export default App

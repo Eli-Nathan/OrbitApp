@@ -1462,7 +1462,7 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.5.tgz#dcce4430e64b443ba8945f0290fb564ad5bac6dd"
   integrity sha512-7+2BITlgjgDhH0vvwZU/HZJVyk+2XUlvxXe8dFMedNX/aMkaOq++rMAFXc0tM7ij15QaWlbdQASBR9dihi+bDQ==
 
-"@types/node@*":
+"@types/node@*", "@types/node@^14.0.22":
   version "14.0.27"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.27.tgz#a151873af5a5e851b51b3b065c9e63390a9e0eb1"
   integrity sha512-kVrqXhbclHNHGu9ztnAwSncIgJv/FaxmzXJvGXNdcCpV1b8u1/Mi6z6m0vwy0LzKeXFTPLH0NzwmoJ3fNCIq0g==
@@ -2724,6 +2724,11 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.2.tgz#ee5ff8f208c8cd613b389f7b222c9801ca62b3f7"
   integrity sha512-ofovWglpqoqbfLNOTBNZLSbMuGrblAf1efvvArGKOZMBrIoJeu5UsAipQolkijtyQx5MtAzT/J9IHj/CEY1mJw==
 
+cycle@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/cycle/-/cycle-1.0.3.tgz#21e80b2be8580f98b468f379430662b046c34ad2"
+  integrity sha1-IegLK+hYD5i0aPN5QwZisEbDStI=
+
 dashdash@^1.12.0:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
@@ -2749,6 +2754,11 @@ dayjs@^1.8.15:
   version "1.8.32"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.32.tgz#66c48b95c397d9f7907e89bd29f78b3d19d40294"
   integrity sha512-V91aTRu5btP+uzGHaaOfodckEfBWhmi9foRP7cauAO1PTB8+tZ9o0Jec7q6TIIRY1N4q1IfiKsZunkB/AEWqMQ==
+
+dayjs@^1.8.29:
+  version "1.8.33"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.33.tgz#18bc4a2b6c1c6f4d67b4c4f2536c0b97e5b766f7"
+  integrity sha512-881TDLZCdpJFKbraWRHcUG8zfMLLX400ENf9rFZDuWc5zYMss6xifo2PhlDX0ftOmR2NRmaIY47bAa4gKQfXqw==
 
 debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8:
   version "2.6.9"
@@ -6233,6 +6243,16 @@ react-is@^16.12.0, react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1, react-
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-native-flipper@^0.49.0:
+  version "0.49.0"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.49.0.tgz#8fd19b7cd8af1e7772ece07e54366aa751a87016"
+  integrity sha512-Y0fIwEyEsouYKbyve71Ps7cUryDcEGLY2EOyve6p9gNMDdpVIfo040JgwCOD/2s+AjWK3C7F0wl4IXIrnF+wiA==
+
+react-native-flipper@^0.52.1:
+  version "0.52.1"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.52.1.tgz#068eb5cd1da4c896ea43923f570f1c74ce5b5ca8"
+  integrity sha512-+Rje0uRUuk/k32odEHsaAXC1CmQ/jKn8h3RBBZlVi3GFAWYpbIZpPspE/s7yFa9B7rcS6fHZbewrf9IfM7FiWA==
+
 react-native-gesture-handler@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.7.0.tgz#0ef74a5ba836832e497dc49eb1ce58baa6c617e5"
@@ -6451,6 +6471,16 @@ redux-axios-middleware@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/redux-axios-middleware/-/redux-axios-middleware-4.0.1.tgz#e7eaaaae58d169b294aae4ef2428d03439f729cc"
   integrity sha512-bQGt75GYNl2VvEtsYE1Hcw8ua869RkUC7W98IJwiQKpyFMs416wqvMV1PBfyTbV83aRzIJzaYytcdcPi+8Bbrg==
+
+redux-flipper@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/redux-flipper/-/redux-flipper-1.3.1.tgz#03795b42d6338ea1df1d5beae6bf714f92c6b3fb"
+  integrity sha512-xLhVl5ttrnDu5CjT/Nn0joMXHeAY1mL8eqXSoBb/VcgutUi/upjXhe7fVbBAKlXF4/e/d9NowiGjixOi9VWINw==
+  dependencies:
+    "@types/node" "^14.0.22"
+    cycle "^1.0.3"
+    dayjs "^1.8.29"
+    react-native-flipper "^0.49.0"
 
 redux@^4.0.0, redux@^4.0.5:
   version "4.0.5"
