@@ -19,6 +19,7 @@ interface SearchResultsProps {
     placeholder: string | undefined
     fetching: boolean
     navigation: any
+    setLatLon: any
     setLocationData: any
     setCurrentWeather: any
     setNightTheme: any
@@ -33,13 +34,16 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
     placeholder,
     fetching,
     navigation,
+    setLatLon,
     setLocationData,
     setCurrentWeather,
     setNightTheme,
     setError,
 }) => {
     const loadNewLocation = (result: any) => {
-        console.log("pressed")
+        const lat = result.latt_long.split(",")[0]
+        const lon = result.latt_long.split(",")[1]
+        setLatLon(lat, lon)
         setLocationData(result.woeid, result.title)
         apiFetch(API.WEATHER, {
             lat,
@@ -55,7 +59,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
                         new Date()
                     )
                 )
-                navigation.navigate("Home", { hasWeather: true })
+                navigation.navigate("SearchedWeather", { hasWeather: true })
             })
             .catch((error) => setError(error))
     }
@@ -131,29 +135,32 @@ const styles: any = StyleSheet.create<Styles>({
     },
 })
 
-const mapStateToProps = (state: RootState) => {
-    const { lat, lon } = state.location
-    return {
-        lat,
-        lon,
-    }
-}
-
 const mapDispatchToProps = (dispatch: any) => ({
     setNightTheme: (nightTheme: boolean) => {
         dispatch(setNightTheme(nightTheme))
     },
     setLatLon: (lat: number, lon: number) => {
-        dispatch(ACTIONS.setLatLon(lat, lon))
+        dispatch(ACTIONS.setLatLon(ACTIONS.SET_SEARCHED_LAT_LON, lat, lon))
     },
     setLocationData: (woeid: number, name: string) => {
-        dispatch(ACTIONS.setLocationData(woeid, name))
+        dispatch(
+            ACTIONS.setLocationData(
+                ACTIONS.SET_SEARCHED_LOCATION_DATA,
+                woeid,
+                name
+            )
+        )
     },
     setCurrentWeather: (weather: any) => {
-        dispatch(ACTIONS.setCurrentWeather(weather))
+        dispatch(
+            ACTIONS.setCurrentWeather(
+                ACTIONS.SET_SEARCHED_CURRENT_WEATHER,
+                weather
+            )
+        )
     },
     setFetching: () => dispatch(ACTIONS.setFetching()),
     setError: (error: string) => dispatch(ACTIONS.setError(error)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchResults)
+export default connect(null, mapDispatchToProps)(SearchResults)

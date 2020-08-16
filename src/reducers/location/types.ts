@@ -1,8 +1,13 @@
 export interface LocationState {
-    lat?: number
-    lon?: number
     fetching?: boolean
     error?: string | null
+    userLocation: LocationData
+    searchedLocation?: LocationData
+}
+
+export interface LocationData {
+    lat?: number
+    lon?: number
     woeid?: number | null
     locationName?: string | null
     nearby?: any

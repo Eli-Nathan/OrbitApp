@@ -6,7 +6,7 @@ import LocationHeader from "../locationHeader/locationHeader"
 import useLiveClock from "../../hooks/useLiveClock"
 
 interface LocaleProps {
-    userLocation: any
+    locationName: string
     nightTheme: boolean
 }
 
@@ -16,9 +16,7 @@ const Locale = (props: LocaleProps) => {
         <>
             <Column style={styles.colStyle}>
                 <View style={styles.linearGradient}>
-                    <LocationHeader
-                        location={props.userLocation.locationName}
-                    />
+                    <LocationHeader location={props.locationName} />
                     <Text
                         style={{ ...styles.textCenter, ...styles.datetime }}
                         marginBottom={12}

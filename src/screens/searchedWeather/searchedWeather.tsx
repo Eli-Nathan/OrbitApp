@@ -4,13 +4,7 @@ import React, {
     useCallback,
     FunctionComponent,
 } from "react"
-import {
-    Platform,
-    RefreshControl,
-    ScrollView,
-    Text,
-    TouchableHighlight,
-} from "react-native"
+import { ScrollView, Text, TouchableHighlight } from "react-native"
 import "react-native-gesture-handler"
 import { connect } from "react-redux"
 
@@ -29,56 +23,26 @@ import { LocationState } from "../../reducers/location/types"
 import BottomSheet from "../../components/bottomSheet"
 import { getPosition } from "../../utils/Geolocate"
 
-interface HomeScreenProps {
+interface SearchedWeatherScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
     route: any
-    setNightTheme: any
-    setLatLon: any
-    setLocationData: any
-    setCurrentWeather: any
-    setFetching: any
-    setError: any
     currentWeather: any
     hourlyWeather: any
     dailyWeather: any
     location: LocationState
     nightTheme: boolean
-    userLocation: any
+    searchedLocation: any
 }
 
-const HomeScreen: FunctionComponent<HomeScreenProps> = ({
+const SearchedWeatherScreen: FunctionComponent<SearchedWeatherScreenProps> = ({
     navigation,
-    route,
-    setNightTheme,
-    setLatLon,
-    setLocationData,
-    setCurrentWeather,
-    setFetching,
-    setError,
     currentWeather,
     hourlyWeather,
     dailyWeather,
     location,
     nightTheme,
-    userLocation,
+    searchedLocation,
 }) => {
-    const [refreshing, setRefreshing] = useState(false)
-    const getPositionProps = {
-        setNightTheme,
-        setLatLon,
-        setLocationData,
-        setCurrentWeather,
-        setFetching,
-        setError,
-        navigation,
-    }
-
-    useEffect(() => {
-        if (!route.params.hasWeather) {
-            getPosition(getPositionProps)
-        }
-    }, [])
-
     return (
         <Screen navigation={navigation} hasSearch nightTheme={nightTheme}>
             <ScrollView style={{ flexGrow: 1, height: "100%" }}>
@@ -86,7 +50,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                     <Location
                         currentWeather={currentWeather}
                         hourlyWeather={hourlyWeather}
-                        locationName={userLocation.locationName}
+                        locationName={searchedLocation?.locationName}
                         nightTheme={nightTheme}
                     />
                 ) : (
@@ -120,44 +84,22 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
 
 const mapStateToProps = (state: RootState) => {
     const location = state.location
-    const { fetching, userLocation } = location
-    const { currentWeather, hourlyWeather, dailyWeather } = userLocation
+    const { fetching, searchedLocation } = location
     return {
         sunRise:
-            currentWeather?.sunrise ||
+            searchedLocation?.currentWeather?.sunrise ||
             new Date(new Date().setHours(5, 0, 0, 0)).toISOString(),
         sunSet:
-            currentWeather?.sunset ||
+            searchedLocation?.currentWeather?.sunset ||
             new Date(new Date().setHours(20, 0, 0, 0)).toISOString(),
-        currentWeather: currentWeather,
-        hourlyWeather: hourlyWeather,
-        dailyWeather: dailyWeather,
+        currentWeather: searchedLocation?.currentWeather,
+        hourlyWeather: searchedLocation?.hourlyWeather,
+        dailyWeather: searchedLocation?.dailyWeather,
         location: location,
-        userLocation,
+        searchedLocation,
         fetching: fetching,
         nightTheme: state.theme?.nightTheme || false,
     }
 }
 
-const mapDispatchToProps = (dispatch: any) => ({
-    setNightTheme: (nightTheme: boolean) => {
-        dispatch(ACTIONS.setNightTheme(nightTheme))
-    },
-    setLatLon: (lat: number, lon: number) => {
-        dispatch(ACTIONS.setLatLon(ACTIONS.SET_USER_LAT_LON, lat, lon))
-    },
-    setLocationData: (woeid: number, name: string) => {
-        dispatch(
-            ACTIONS.setLocationData(ACTIONS.SET_USER_LOCATION_DATA, woeid, name)
-        )
-    },
-    setCurrentWeather: (weather: any) => {
-        dispatch(
-            ACTIONS.setCurrentWeather(ACTIONS.SET_USER_CURRENT_WEATHER, weather)
-        )
-    },
-    setFetching: () => dispatch(ACTIONS.setFetching()),
-    setError: (error: string) => dispatch(ACTIONS.setError(error)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
+export default connect(mapStateToProps)(SearchedWeatherScreen)

@@ -1,16 +1,20 @@
 import {
-    SET_LAT_LON,
     SET_FETCHING,
     SET_ERROR,
-    SET_LOCATION_DATA,
-    SET_CURRENT_WEATHER,
-    SET_NIGHT_THEME,
+    SET_USER_LAT_LON,
+    SET_USER_LOCATION_DATA,
+    SET_USER_CURRENT_WEATHER,
+    SET_SEARCHED_LAT_LON,
+    SET_SEARCHED_LOCATION_DATA,
+    SET_SEARCHED_CURRENT_WEATHER,
 } from "./actions"
 import { LocationState, LocationStateAction } from "./types"
 
 export const initialState = {
-    lat: 0,
-    lon: 0,
+    userLocation: {
+        lat: 0,
+        lon: 0,
+    },
     fetching: true,
     error: null,
 }
@@ -20,29 +24,73 @@ export const locationReducer = (
     action: LocationStateAction
 ) => {
     switch (action.type) {
-        case SET_LAT_LON:
+        case SET_USER_LAT_LON:
             return {
                 ...state,
-                lat: action?.payload?.lat || 0,
-                lon: action?.payload?.lon || 0,
+                userLocation: {
+                    ...state.userLocation,
+                    lat: action?.payload?.lat || 0,
+                    lon: action?.payload?.lon || 0,
+                },
                 fetching: false,
                 error: null,
             }
-        case SET_LOCATION_DATA:
+        case SET_USER_LOCATION_DATA:
             return {
                 ...state,
-                woeid: action.payload?.woeid,
-                locationName: action.payload?.locationName,
-                nearby: action.payload?.nearby,
+                userLocation: {
+                    ...state.userLocation,
+                    woeid: action.payload?.woeid,
+                    locationName: action.payload?.locationName,
+                    nearby: action.payload?.nearby,
+                },
                 fetching: false,
                 error: null,
             }
-        case SET_CURRENT_WEATHER:
+        case SET_USER_CURRENT_WEATHER:
             return {
                 ...state,
-                currentWeather: action.payload?.weather?.current,
-                hourlyWeather: action.payload?.weather?.hourly,
-                dailyWeather: action.payload?.weather?.daily,
+                userLocation: {
+                    ...state.userLocation,
+                    currentWeather: action.payload?.weather?.current,
+                    hourlyWeather: action.payload?.weather?.hourly,
+                    dailyWeather: action.payload?.weather?.daily,
+                },
+                fetching: false,
+                error: null,
+            }
+        case SET_SEARCHED_LAT_LON:
+            return {
+                ...state,
+                searchedLocation: {
+                    ...state.searchedLocation,
+                    lat: action?.payload?.lat,
+                    lon: action?.payload?.lon,
+                },
+                fetching: false,
+                error: null,
+            }
+        case SET_SEARCHED_LOCATION_DATA:
+            return {
+                ...state,
+                searchedLocation: {
+                    ...state.searchedLocation,
+                    woeid: action.payload?.woeid,
+                    locationName: action.payload?.locationName,
+                    nearby: action.payload?.nearby,
+                },
+                fetching: false,
+                error: null,
+            }
+        case SET_SEARCHED_CURRENT_WEATHER:
+            return {
+                ...state,
+                searchedLocation: {
+                    ...state.searchedLocation,
+                    currentWeather: action.payload?.weather?.current,
+                    hourlyWeather: action.payload?.weather?.hourly,
+                    dailyWeather: action.payload?.weather?.daily,
+                },
                 fetching: false,
                 error: null,
             }

@@ -8,7 +8,7 @@ import Weather from "../weather"
 interface LocationProps {
     currentWeather: any
     hourlyWeather: any
-    location: any
+    locationName: string
     nightTheme: boolean
 }
 
@@ -19,7 +19,7 @@ const Location = (props: LocationProps) => {
                 <View style={styles.locationDisplay}>
                     <Locale
                         nightTheme={props.nightTheme}
-                        userLocation={props.location}
+                        locationName={props.locationName}
                     />
                     <Weather
                         currentWeather={props.currentWeather}

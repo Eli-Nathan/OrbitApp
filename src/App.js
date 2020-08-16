@@ -28,6 +28,7 @@ import { Row } from "./primitives"
 import Screen from "./screens"
 import HomeScreen from "./screens/home/home"
 import SearchScreen from "./screens/search"
+import SearchedWeatherScreen from "./screens/searchedWeather/searchedWeather"
 import Location from "./components/location/Location"
 
 const middlewares = []
@@ -55,6 +56,10 @@ const App = () => {
                         initialParams={{ hasWeather: false }}
                     />
                     <Stack.Screen name="Search" component={SearchScreen} />
+                    <Stack.Screen
+                        name="SearchedWeather"
+                        component={SearchedWeatherScreen}
+                    />
                 </Stack.Navigator>
             </NavigationContainer>
         </Provider>
