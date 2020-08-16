@@ -131,7 +131,7 @@ android {
         pickFirst 'lib/arm64-v8a/libc++_shared.so'
     }
 
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion 28
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -162,6 +162,7 @@ android {
             keyPassword 'android'
         }
     }
+    buildToolsVersion = buildToolsVersion
     buildTypes {
         debug {
             signingConfig signingConfigs.debug

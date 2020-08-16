@@ -14,7 +14,6 @@ import { IconSearch } from "../assets/icons"
 
 interface ScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
-    light?: boolean
     hasSearch?: boolean
     nightTheme: boolean
 }
@@ -23,17 +22,16 @@ const Screen: FunctionComponent<ScreenProps> = ({
     hasSearch,
     children,
     navigation,
-    light,
     nightTheme,
 }) => {
     const styles = StyleSheet.create({
         safeAreaView: {
-            backgroundColor:
-                light || !nightTheme
-                    ? Theme.Colours.LightBlue
-                    : Theme.Colours.DarkBlue,
+            backgroundColor: nightTheme
+                ? Theme.Colours.DarkBlue
+                : Theme.Colours.LightBlue,
             height: "100%",
             flexGrow: 1,
+            flex: 1,
             display: "flex",
         },
         rowStyles: {
@@ -48,12 +46,12 @@ const Screen: FunctionComponent<ScreenProps> = ({
         <SafeAreaView style={styles.safeAreaView}>
             <LinearGradient
                 colors={[
-                    light || !nightTheme
-                        ? Theme.Colours.LightBlue
-                        : Theme.Colours.DarkBlue,
-                    light || !nightTheme
-                        ? Theme.Colours.LightBlue_light
-                        : Theme.Colours.DarkBlue_light,
+                    nightTheme
+                        ? Theme.Colours.DarkBlue
+                        : Theme.Colours.LightBlue,
+                    nightTheme
+                        ? Theme.Colours.DarkBlue_light
+                        : Theme.Colours.LightBlue_light,
                 ]}
                 style={{ flexGrow: 1 }}
             >

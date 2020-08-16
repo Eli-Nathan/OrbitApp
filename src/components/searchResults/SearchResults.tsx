@@ -14,8 +14,6 @@ import { Text, Row } from "../../primitives"
 interface SearchResultsProps {
     query: string
     results: any
-    lat: number
-    lon: number
     placeholder: string | undefined
     fetching: boolean
     navigation: any
@@ -28,8 +26,6 @@ interface SearchResultsProps {
 
 const SearchResults: FunctionComponent<SearchResultsProps> = ({
     query,
-    lat,
-    lon,
     results,
     placeholder,
     fetching,
@@ -64,7 +60,6 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
             .catch((error) => setError(error))
     }
     const getHighlightedText = (text: string, highlight: string) => {
-        console.log("Highlight")
         const parts = text.split(new RegExp(`(${highlight})`, "gi"))
         return (
             <Text>

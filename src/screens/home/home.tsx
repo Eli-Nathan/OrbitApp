@@ -4,17 +4,9 @@ import React, {
     useCallback,
     FunctionComponent,
 } from "react"
-import {
-    Platform,
-    RefreshControl,
-    ScrollView,
-    Text,
-    TouchableHighlight,
-} from "react-native"
+import { ScrollView, View } from "react-native"
 import "react-native-gesture-handler"
 import { connect } from "react-redux"
-
-import { PERMISSIONS, request } from "react-native-permissions"
 import {
     NavigationParams,
     NavigationScreenProp,
@@ -28,6 +20,8 @@ import { RootState } from "../../reducers"
 import { LocationState } from "../../reducers/location/types"
 import BottomSheet from "../../components/bottomSheet"
 import { getPosition } from "../../utils/Geolocate"
+import { ClearSkyDay } from "../../assets/icons"
+import { Column } from "../../primitives"
 
 interface HomeScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -62,7 +56,6 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     nightTheme,
     userLocation,
 }) => {
-    const [refreshing, setRefreshing] = useState(false)
     const getPositionProps = {
         setNightTheme,
         setLatLon,
@@ -83,35 +76,36 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
         <Screen navigation={navigation} hasSearch nightTheme={nightTheme}>
             <ScrollView style={{ flexGrow: 1, height: "100%" }}>
                 {currentWeather && location ? (
-                    <Location
-                        currentWeather={currentWeather}
-                        hourlyWeather={hourlyWeather}
-                        locationName={userLocation.locationName}
-                        nightTheme={nightTheme}
-                    />
-                ) : (
-                    <TouchableHighlight
-                        onPress={() =>
-                            request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then(
-                                () => getPosition
-                            )
-                        }
+                    <Column
+                        style={{
+                            flex: 1,
+                            flexGrow: 1,
+                            display: "flex",
+                            width: "100%",
+                            height: "100%",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
                     >
-                        <Text
-                            style={{
-                                color: "#fff",
-                                textAlign: "center",
-                            }}
-                        >
-                            Allow WeatherApp to use location services
-                        </Text>
-                    </TouchableHighlight>
+                        <ClearSkyDay width={100} height={100} />
+                    </Column>
+                ) : (
+                    <Column
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <ClearSkyDay width={100} height={100} />
+                    </Column>
                 )}
             </ScrollView>
             {dailyWeather && (
                 <BottomSheet
                     dailyWeather={dailyWeather}
-                    snapPoints={[600, 180]}
+                    snapPoints={[600, 220]}
                 />
             )}
         </Screen>

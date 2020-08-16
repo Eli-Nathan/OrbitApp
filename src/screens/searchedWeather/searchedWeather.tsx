@@ -75,7 +75,7 @@ const SearchedWeatherScreen: FunctionComponent<SearchedWeatherScreenProps> = ({
             {dailyWeather && (
                 <BottomSheet
                     dailyWeather={dailyWeather}
-                    snapPoints={[600, 180]}
+                    snapPoints={[600, 220]}
                 />
             )}
         </Screen>

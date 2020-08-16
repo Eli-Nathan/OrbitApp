@@ -11,6 +11,7 @@
     "build:svgs": "npx svgr -d src src --ext js --native"
   },
   "dependencies": {
+    "@react-native-community/art": "^1.2.0",
     "@react-native-community/geolocation": "^2.0.2",
     "@react-native-community/masked-view": "^0.1.7",
     "@react-navigation/native": "^5.7.1",
@@ -27,6 +28,7 @@
     "react-native-gesture-handler": "^1.7.0",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-permissions": "^2.1.5",
+    "react-native-progress": "^4.1.2",
     "react-native-reanimated": "^2.0.0-alpha.3",
     "react-native-safe-area-context": "^3.1.1",
     "react-native-screens": "^2.9.0",
