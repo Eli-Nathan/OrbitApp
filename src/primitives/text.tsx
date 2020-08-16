@@ -1,18 +1,9 @@
 import React, { FunctionComponent } from "react"
 import { StyleSheet, Text } from "react-native"
 
-interface TextProps {
-    style?: any
-    children?: any
-    bold?: boolean
-    margin?: number
-    marginTop?: number
-    marginRight?: number
-    marginBottom?: number
-    marginLeft?: number
-}
+import { PrimitiveStyleProps } from "./types"
 
-const TextPrimitive: FunctionComponent<TextProps> = ({
+const TextPrimitive: FunctionComponent<PrimitiveStyleProps> = ({
     children,
     style,
     bold,
