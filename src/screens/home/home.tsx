@@ -13,13 +13,8 @@ import {
 } from "react-native"
 import "react-native-gesture-handler"
 import { connect } from "react-redux"
-import Geolocation from "@react-native-community/geolocation"
-import {
-    PERMISSIONS,
-    RESULTS,
-    checkMultiple,
-    request,
-} from "react-native-permissions"
+
+import { PERMISSIONS, request } from "react-native-permissions"
 import {
     NavigationParams,
     NavigationScreenProp,
@@ -29,22 +24,20 @@ import {
 import Screen from ".."
 import Location from "../../components/location/Location"
 import * as ACTIONS from "../../reducers/location/actions"
-import { API } from "../../constants/api"
 import { RootState } from "../../reducers"
-import { calcIsDay } from "../../utils/dates"
 import { LocationState } from "../../reducers/location/types"
-import apiFetch from "../../hooks/apiFetch/apiFetch"
 import BottomSheet from "../../components/bottomSheet"
+import { getPosition } from "../../utils/Geolocate"
 
 interface HomeScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
     route: any
-    dispatchSetNightTheme: any
-    dispatchSetLatLon: any
-    dispatchSetLocationData: any
-    dispatchSetCurrentWeather: any
-    dispatchSetFetching: any
-    dispatchSetError: any
+    setNightTheme: any
+    setLatLon: any
+    setLocationData: any
+    setCurrentWeather: any
+    setFetching: any
+    setError: any
     currentWeather: any
     hourlyWeather: any
     dailyWeather: any
@@ -55,12 +48,12 @@ interface HomeScreenProps {
 const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     navigation,
     route,
-    dispatchSetNightTheme,
-    dispatchSetLatLon,
-    dispatchSetLocationData,
-    dispatchSetCurrentWeather,
-    dispatchSetFetching,
-    dispatchSetError,
+    setNightTheme,
+    setLatLon,
+    setLocationData,
+    setCurrentWeather,
+    setFetching,
+    setError,
     currentWeather,
     hourlyWeather,
     dailyWeather,
@@ -68,86 +61,26 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     nightTheme,
 }) => {
     const [refreshing, setRefreshing] = useState(false)
-
-    const geoLocate = () =>
-        Geolocation.getCurrentPosition(
-            (pos) => {
-                if (pos.coords.latitude && pos.coords.longitude) {
-                    dispatchSetFetching()
-                    const lat = pos.coords.latitude
-                    const lon = pos.coords.longitude
-                    dispatchSetLatLon(lat, lon)
-                    apiFetch(API.LOCATION, {
-                        lattlong: `${lat},${lon}`,
-                    })
-                        .then(async (data) => {
-                            dispatchSetLocationData(
-                                data[0].woeid,
-                                data[0].title
-                            )
-                            await apiFetch(API.WEATHER, {
-                                lat,
-                                lon,
-                                units: "metric",
-                            }).then((weatherData) => {
-                                dispatchSetCurrentWeather(weatherData)
-                                dispatchSetNightTheme(
-                                    !calcIsDay(
-                                        weatherData.current.sunrise,
-                                        weatherData.current.sunset,
-                                        new Date()
-                                    )
-                                )
-                            })
-                        })
-                        .catch((error) => dispatchSetError(error))
-                }
-            },
-            (error) => dispatchSetError(error)
-        )
-
-    const getPosition = () => {
-        checkMultiple([
-            PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-            PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
-        ])
-            .then((statuses) => {
-                const permission =
-                    Platform.OS === "ios"
-                        ? statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE]
-                        : statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]
-                switch (permission) {
-                    case RESULTS.UNAVAILABLE:
-                        console.log(
-                            "This feature is not available (on this device / in this context)"
-                        )
-                        break
-                    case RESULTS.DENIED:
-                        navigation.navigate("Search")
-                        break
-                    case RESULTS.GRANTED:
-                        geoLocate()
-                        break
-                    case RESULTS.BLOCKED:
-                        console.log(
-                            "The permission is denied and not requestable anymore"
-                        )
-                        break
-                }
-            })
-            .catch((error) => dispatchSetError(error))
+    const getPositionProps = {
+        setNightTheme,
+        setLatLon,
+        setLocationData,
+        setCurrentWeather,
+        setFetching,
+        setError,
+        navigation,
     }
 
     useEffect(() => {
         if (!route.params.hasWeather) {
-            getPosition()
+            getPosition(getPositionProps)
         }
     }, [])
 
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
         try {
-            getPosition()
+            getPosition(getPositionProps)
             setTimeout(() => setRefreshing(false), 1000)
         } catch (error) {
             console.error(error)
@@ -157,15 +90,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
 
     return (
         <Screen navigation={navigation} hasSearch nightTheme={nightTheme}>
-            <ScrollView
-                style={{ flexGrow: 1, height: "100%" }}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                    />
-                }
-            >
+            <ScrollView style={{ flexGrow: 1, height: "100%" }}>
                 {currentWeather && location ? (
                     <Location
                         currentWeather={currentWeather}
@@ -192,7 +117,12 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                     </TouchableHighlight>
                 )}
             </ScrollView>
-            {dailyWeather && <BottomSheet dailyWeather={dailyWeather} />}
+            {dailyWeather && (
+                <BottomSheet
+                    dailyWeather={dailyWeather}
+                    snapPoints={[600, 180]}
+                />
+            )}
         </Screen>
     )
 }
@@ -217,20 +147,20 @@ const mapStateToProps = (state: RootState) => {
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-    dispatchSetNightTheme: (nightTheme: boolean) => {
+    setNightTheme: (nightTheme: boolean) => {
         dispatch(ACTIONS.setNightTheme(nightTheme))
     },
-    dispatchSetLatLon: (lat: number, lon: number) => {
+    setLatLon: (lat: number, lon: number) => {
         dispatch(ACTIONS.setLatLon(lat, lon))
     },
-    dispatchSetLocationData: (woeid: number, name: string) => {
+    setLocationData: (woeid: number, name: string) => {
         dispatch(ACTIONS.setLocationData(woeid, name))
     },
-    dispatchSetCurrentWeather: (weather: any) => {
+    setCurrentWeather: (weather: any) => {
         dispatch(ACTIONS.setCurrentWeather(weather))
     },
-    dispatchSetFetching: () => dispatch(ACTIONS.setFetching()),
-    dispatchSetError: (error: string) => dispatch(ACTIONS.setError(error)),
+    setFetching: () => dispatch(ACTIONS.setFetching()),
+    setError: (error: string) => dispatch(ACTIONS.setError(error)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)

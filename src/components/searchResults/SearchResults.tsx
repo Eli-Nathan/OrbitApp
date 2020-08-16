@@ -1,14 +1,7 @@
 import React, { FunctionComponent } from "react"
 import { connect } from "react-redux"
-import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextStyle,
-    ViewStyle,
-    View,
-    TouchableWithoutFeedback,
-} from "react-native"
+import { ScrollView, StyleSheet, ViewStyle } from "react-native"
+import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 
 import { setNightTheme } from "../../reducers/theme/actions"
 import * as ACTIONS from "../../reducers/location/actions"
@@ -16,6 +9,7 @@ import apiFetch from "../../hooks/apiFetch"
 import { API } from "../../constants/api"
 import { calcIsDay } from "../../utils/dates"
 import { RootState } from "../../reducers"
+import { Text, Row } from "../../primitives"
 
 interface SearchResultsProps {
     query: string
@@ -25,10 +19,10 @@ interface SearchResultsProps {
     placeholder: string | undefined
     fetching: boolean
     navigation: any
-    dispatchSetLocationData: any
-    dispatchSetCurrentWeather: any
-    dispatchSetNightTheme: any
-    dispatchSetError: any
+    setLocationData: any
+    setCurrentWeather: any
+    setNightTheme: any
+    setError: any
 }
 
 const SearchResults: FunctionComponent<SearchResultsProps> = ({
@@ -39,21 +33,22 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
     placeholder,
     fetching,
     navigation,
-    dispatchSetLocationData,
-    dispatchSetCurrentWeather,
-    dispatchSetNightTheme,
-    dispatchSetError,
+    setLocationData,
+    setCurrentWeather,
+    setNightTheme,
+    setError,
 }) => {
     const loadNewLocation = (result: any) => {
-        dispatchSetLocationData(result.woeid, result.title)
+        console.log("pressed")
+        setLocationData(result.woeid, result.title)
         apiFetch(API.WEATHER, {
             lat,
             lon,
             units: "metric",
         })
             .then((data) => {
-                dispatchSetCurrentWeather(data)
-                dispatchSetNightTheme(
+                setCurrentWeather(data)
+                setNightTheme(
                     !calcIsDay(
                         data.current.sunrise,
                         data.current.sunset,
@@ -62,9 +57,10 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
                 )
                 navigation.navigate("Home", { hasWeather: true })
             })
-            .catch((error) => dispatchSetError(error))
+            .catch((error) => setError(error))
     }
     const getHighlightedText = (text: string, highlight: string) => {
+        console.log("Highlight")
         const parts = text.split(new RegExp(`(${highlight})`, "gi"))
         return (
             <Text>
@@ -75,6 +71,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
                                 .replace(" ", "")
                                 .toUpperCase()}_${i}`}
                             style={styles.highlightText}
+                            bold
                         >
                             {part}
                         </Text>
@@ -87,14 +84,19 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
     }
     const renderResults = () =>
         results.slice(0, 5).map((result: any) => (
-            <View style={styles.result} key={`${result.woeid}`}>
+            <Row style={styles.result} key={`${result.woeid}`}>
                 <TouchableWithoutFeedback
+                    style={{ width: "100%", height: "100%", flexGrow: 1 }}
                     onPress={() => loadNewLocation(result)}
-                    hitSlop={{ top: 20, bottom: 20, left: 14, right: 14 }}
+                    hitSlop={{ top: 100, bottom: 100, left: 100, right: 100 }}
                 >
-                    <Text>{getHighlightedText(result.title, query)}</Text>
+                    <Text
+                        style={{ width: "100%", height: "100%", flexGrow: 1 }}
+                    >
+                        {getHighlightedText(result.title, query)}
+                    </Text>
                 </TouchableWithoutFeedback>
-            </View>
+            </Row>
         ))
     return (
         <ScrollView style={styles.results} keyboardShouldPersistTaps="handled">
@@ -110,21 +112,20 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
 }
 
 interface Styles {
-    highlightText: TextStyle
     results: ViewStyle
     result: ViewStyle
 }
 
 const styles: any = StyleSheet.create<Styles>({
-    highlightText: {
-        color: "green",
-    },
     results: {
+        width: "100%",
         paddingBottom: 20,
         paddingLeft: 14,
         paddingRight: 14,
+        color: "#fff",
     },
     result: {
+        width: "100%",
         paddingTop: 20,
         paddingBottom: 20,
     },
@@ -139,20 +140,20 @@ const mapStateToProps = (state: RootState) => {
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-    dispatchSetNightTheme: (nightTheme: boolean) => {
+    setNightTheme: (nightTheme: boolean) => {
         dispatch(setNightTheme(nightTheme))
     },
-    dispatchSetLatLon: (lat: number, lon: number) => {
+    setLatLon: (lat: number, lon: number) => {
         dispatch(ACTIONS.setLatLon(lat, lon))
     },
-    dispatchSetLocationData: (woeid: number, name: string) => {
+    setLocationData: (woeid: number, name: string) => {
         dispatch(ACTIONS.setLocationData(woeid, name))
     },
-    dispatchSetCurrentWeather: (weather: any) => {
+    setCurrentWeather: (weather: any) => {
         dispatch(ACTIONS.setCurrentWeather(weather))
     },
-    dispatchSetFetching: () => dispatch(ACTIONS.setFetching()),
-    dispatchSetError: (error: string) => dispatch(ACTIONS.setError(error)),
+    setFetching: () => dispatch(ACTIONS.setFetching()),
+    setError: (error: string) => dispatch(ACTIONS.setError(error)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchResults)
