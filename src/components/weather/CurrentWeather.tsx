@@ -33,10 +33,6 @@ const CurrentWeather: FunctionComponent<WeatherProps> = ({
 
 const styles: any = StyleSheet.create({
     colStyle: {
-        flex: 1,
-        display: "flex",
-        borderRadius: 8,
-        textAlign: "center",
         alignItems: "center",
     },
     textCenter: {

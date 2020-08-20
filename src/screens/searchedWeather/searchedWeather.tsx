@@ -4,7 +4,7 @@ import React, {
     useCallback,
     FunctionComponent,
 } from "react"
-import { ScrollView, Text, TouchableHighlight } from "react-native"
+import { ScrollView, Text, TouchableHighlight, View } from "react-native"
 import "react-native-gesture-handler"
 import { connect } from "react-redux"
 
@@ -45,7 +45,7 @@ const SearchedWeatherScreen: FunctionComponent<SearchedWeatherScreenProps> = ({
 }) => {
     return (
         <Screen navigation={navigation} hasSearch nightTheme={nightTheme}>
-            <ScrollView style={{ flexGrow: 1, height: "100%" }}>
+            <View style={{ flexGrow: 1, height: "100%" }}>
                 {currentWeather && location ? (
                     <Location
                         currentWeather={currentWeather}
@@ -71,7 +71,7 @@ const SearchedWeatherScreen: FunctionComponent<SearchedWeatherScreenProps> = ({
                         </Text>
                     </TouchableHighlight>
                 )}
-            </ScrollView>
+            </View>
             {dailyWeather && (
                 <BottomSheet
                     dailyWeather={dailyWeather}

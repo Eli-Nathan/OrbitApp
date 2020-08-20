@@ -21,7 +21,7 @@ const HourBlock: FunctionComponent<HourBlockProps> = ({
     time,
     temp,
 }) => (
-    <Column style={styles.colStyle}>
+    <Column style={styles.card}>
         <Text style={{ ...styles.textCenter, ...styles.today }}>
             {new Date(time * 1000).getHours()}:00
         </Text>
@@ -67,24 +67,26 @@ const HourlyForecast: FunctionComponent<HourlyForecastProps> = ({
 
 const styles: any = StyleSheet.create({
     scrollStyle: {
+        width: "100%",
+        height: 100,
+        flex: 1,
         paddingLeft: 18,
         paddingRight: 18,
     },
-    colStyle: {
+    card: {
         backgroundColor: "#fff",
         shadowColor: "#7388A5",
         shadowOffset: {
             width: 0,
             height: 5,
         },
+        height: 140,
         shadowOpacity: 0.16,
         shadowRadius: 6.68,
         elevation: 11,
         margin: 6,
         padding: 12,
         width: 140,
-        flex: 1,
-        display: "flex",
         borderRadius: 12,
         textAlign: "center",
         alignItems: "center",

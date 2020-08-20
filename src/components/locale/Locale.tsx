@@ -14,38 +14,20 @@ const Locale = (props: LocaleProps) => {
     const liveDate = useLiveClock()
     return (
         <>
-            <Column style={styles.colStyle}>
-                <View style={styles.linearGradient}>
-                    <LocationHeader location={props.locationName} />
-                    <Text
-                        style={{ ...styles.textCenter, ...styles.datetime }}
-                        marginBottom={12}
-                    >
-                        {`${liveDate.format("HH:mm")} - ${liveDate.format(
-                            "dddd"
-                        )} ${liveDate.format("Do MMMM")}`}
-                    </Text>
-                </View>
-            </Column>
+            <LocationHeader location={props.locationName} />
+            <Text
+                style={{ ...styles.textCenter, ...styles.datetime }}
+                marginBottom={12}
+            >
+                {`${liveDate.format("HH:mm")} - ${liveDate.format(
+                    "dddd"
+                )} ${liveDate.format("Do MMMM")}`}
+            </Text>
         </>
     )
 }
 
 const styles: any = StyleSheet.create({
-    colStyle: {
-        flex: 1,
-        textAlign: "center",
-        alignItems: "center",
-    },
-    linearGradient: {
-        width: "100%",
-        borderRadius: 8,
-        height: "100%",
-        display: "flex",
-        textAlign: "center",
-        alignItems: "center",
-        padding: 12,
-    },
     textCenter: {
         textAlign: "center",
         color: "#fff",

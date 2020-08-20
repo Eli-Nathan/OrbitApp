@@ -74,34 +74,27 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
 
     return (
         <Screen navigation={navigation} hasSearch nightTheme={nightTheme}>
-            <ScrollView style={{ flexGrow: 1, height: "100%" }}>
+            <View style={{ flexGrow: 1, height: "100%" }}>
                 {currentWeather && location ? (
-                    <Column
-                        style={{
-                            flex: 1,
-                            flexGrow: 1,
-                            display: "flex",
-                            width: "100%",
-                            height: "100%",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                    >
-                        <ClearSkyDay width={100} height={100} />
-                    </Column>
+                    <Location
+                        currentWeather={currentWeather}
+                        hourlyWeather={hourlyWeather}
+                        locationName={userLocation.locationName}
+                        nightTheme={nightTheme}
+                    />
                 ) : (
                     <Column
                         style={{
-                            width: "100%",
-                            height: "100%",
+                            flexGrow: 1,
                             alignItems: "center",
+                            marginTop: -300,
                             justifyContent: "center",
                         }}
                     >
                         <ClearSkyDay width={100} height={100} />
                     </Column>
                 )}
-            </ScrollView>
+            </View>
             {dailyWeather && (
                 <BottomSheet
                     dailyWeather={dailyWeather}

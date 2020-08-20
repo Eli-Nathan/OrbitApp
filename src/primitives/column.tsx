@@ -7,6 +7,8 @@ const Column: FunctionComponent<PrimitiveStyleProps> = (props: any) => {
     const styles = StyleSheet.create({
         columnStyle: {
             flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
             ...props.style,
         },
     })

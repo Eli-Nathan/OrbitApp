@@ -118,6 +118,7 @@ interface Styles {
 const styles: any = StyleSheet.create<Styles>({
     results: {
         width: "100%",
+        height: 100,
         paddingBottom: 20,
         paddingLeft: 14,
         paddingRight: 14,
