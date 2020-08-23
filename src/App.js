@@ -22,6 +22,7 @@ import {
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
+import { useAsyncStorage } from "@react-native-community/async-storage"
 
 import rootReducer from "./reducers"
 import { Row } from "./primitives"

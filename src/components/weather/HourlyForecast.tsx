@@ -4,9 +4,13 @@ import { StyleSheet, ScrollView, View } from "react-native"
 import WeatherIcon from "../weatherIcon"
 import { parseTemp } from "../../utils/strings"
 import { Column, Row, Text } from "../../primitives"
+import Theme from "../../theme"
+import { calcIsDayRoughly } from "../../utils/dates"
 
 interface HourlyForecastProps {
     hourlyWeather: any
+    sunrise: number
+    sunset: number
 }
 
 interface HourBlockProps {
@@ -14,41 +18,78 @@ interface HourBlockProps {
     weather: any
     time: number
     temp: number
+    sunrise: number
+    sunset: number
 }
 
 const HourBlock: FunctionComponent<HourBlockProps> = ({
     weather,
     time,
     temp,
-}) => (
-    <Column style={styles.card}>
-        <Text style={{ ...styles.textCenter, ...styles.today }}>
-            {new Date(time * 1000).getHours()}:00
-        </Text>
-        <WeatherIcon code={`${weather.icon}`} />
-        <Row>
-            <Text style={{ ...styles.textCenter, ...styles.temp }}>
-                {parseTemp(temp)}
+    sunrise,
+    sunset,
+}) => {
+    console.log(`Rise: ${sunrise}, Set: ${sunset}, Time: ${time}`)
+    const dayBlock = calcIsDayRoughly(sunrise, sunset, time)
+    console.log("dayBlock", dayBlock)
+    return (
+        <Column
+            style={{
+                ...styles.card,
+                ...styles[dayBlock ? "cardDay" : "cardNight"],
+            }}
+        >
+            <Text
+                style={{
+                    ...styles.textCenter,
+                    ...styles.today,
+                    ...styles[dayBlock ? "dayText" : "nightText"],
+                }}
+            >
+                {new Date(time * 1000).getHours()}:00
             </Text>
-            <Text style={{ ...styles.textCenter, ...styles.tempSmall }}>
-                °c
-            </Text>
-        </Row>
-    </Column>
-)
+            <WeatherIcon code={`${weather.icon}`} />
+            <Row>
+                <Text
+                    style={{
+                        ...styles.textCenter,
+                        ...styles.temp,
+                        ...styles[dayBlock ? "dayText" : "nightText"],
+                    }}
+                >
+                    {parseTemp(temp)}
+                </Text>
+                <Text
+                    style={{
+                        ...styles.textCenter,
+                        ...styles.tempSmall,
+                        ...styles[dayBlock ? "dayText" : "nightText"],
+                    }}
+                >
+                    °c
+                </Text>
+            </Row>
+        </Column>
+    )
+}
 
 const HourlyForecast: FunctionComponent<HourlyForecastProps> = ({
     hourlyWeather,
+    sunrise,
+    sunset,
 }) => {
     const renderHours = () => {
+        console.log("renderHours")
         return hourlyWeather
-            .splice(1, 12)
+            .slice(1, 12)
             .map((hour: any) => (
                 <HourBlock
                     key={hour.dt}
                     weather={hour.weather[0]}
                     time={hour.dt}
                     temp={hour.temp}
+                    sunrise={sunrise}
+                    sunset={sunset}
                 />
             ))
     }
@@ -91,6 +132,12 @@ const styles: any = StyleSheet.create({
         textAlign: "center",
         alignItems: "center",
     },
+    cardDay: {
+        backgroundColor: "#fff",
+    },
+    cardNight: {
+        backgroundColor: Theme.Colours.DarkBlue,
+    },
     textCenter: {
         textAlign: "center",
         color: "#7388A5",
@@ -109,6 +156,12 @@ const styles: any = StyleSheet.create({
     today: {
         fontSize: 16,
         fontWeight: "normal",
+    },
+    dayText: {
+        color: "#7388A5",
+    },
+    nightText: {
+        color: "#fff",
     },
 })
 

@@ -16,7 +16,11 @@ const Weather: FunctionComponent<WeatherProps> = ({
     return (
         <>
             <CurrentWeather currentWeather={currentWeather} />
-            <HourlyForecast hourlyWeather={hourlyWeather} />
+            <HourlyForecast
+                hourlyWeather={hourlyWeather}
+                sunrise={currentWeather.sunrise}
+                sunset={currentWeather.sunset}
+            />
         </>
     )
 }

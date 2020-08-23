@@ -1,9 +1,4 @@
-import React, {
-    useEffect,
-    useState,
-    useCallback,
-    FunctionComponent,
-} from "react"
+import React, { useEffect, FunctionComponent, useState } from "react"
 import { ScrollView, View } from "react-native"
 import "react-native-gesture-handler"
 import { connect } from "react-redux"
@@ -22,6 +17,7 @@ import BottomSheet from "../../components/bottomSheet"
 import { getPosition } from "../../utils/Geolocate"
 import { ClearSkyDay } from "../../assets/icons"
 import { Column } from "../../primitives"
+import { useAsyncStorage } from "@react-native-community/async-storage"
 
 interface HomeScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -56,6 +52,14 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     nightTheme,
     userLocation,
 }) => {
+    const [persistedWeather, setHasWeather] = useState<any>(false)
+    const { getItem } = useAsyncStorage("@current_weather")
+
+    const readWeatherFromStorage = async () => {
+        const item = await getItem()
+        console.log("storageItem", item)
+        setHasWeather(item)
+    }
     const getPositionProps = {
         setNightTheme,
         setLatLon,
@@ -67,8 +71,14 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     }
 
     useEffect(() => {
-        if (!route.params.hasWeather) {
+        console.log("persistedWeather home before", persistedWeather)
+        readWeatherFromStorage()
+        console.log("persistedWeather home after", persistedWeather)
+        if (!persistedWeather) {
             getPosition(getPositionProps)
+        } else {
+            const persitedCurrentWeather = persistedWeather.current
+            console.log("persistedWeather", persistedWeather)
         }
     }, [])
 
@@ -77,8 +87,12 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
             <View style={{ flexGrow: 1, height: "100%" }}>
                 {currentWeather && location ? (
                     <Location
-                        currentWeather={currentWeather}
-                        hourlyWeather={hourlyWeather}
+                        currentWeather={
+                            persistedWeather?.current || currentWeather
+                        }
+                        hourlyWeather={
+                            persistedWeather?.hourly || hourlyWeather
+                        }
                         locationName={userLocation.locationName}
                         nightTheme={nightTheme}
                     />

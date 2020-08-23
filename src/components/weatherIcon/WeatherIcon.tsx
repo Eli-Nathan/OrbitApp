@@ -26,8 +26,6 @@ const renderIcon: FunctionComponent<IconProps> = ({
         ? smallSize
         : size || defaultSize
     const mappedIcon = icons.iconMap[code]
-    console.log(mappedIcon)
-    console.log(isCurrent)
     const WeatherIcon = icons[mappedIcon]
     return (
         <WeatherIcon
