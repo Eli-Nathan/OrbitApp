@@ -56,7 +56,7 @@ const SearchScreen: FunctionComponent<SearchScreenProps> = ({ navigation }) => {
         })
     }
     return (
-        <Screen navigation={navigation} nightTheme={false} light>
+        <Screen navigation={navigation} nightTheme={false}>
             <Row style={styles.rowStyles}>
                 <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                     <Text style={styles.navItem}>Back</Text>

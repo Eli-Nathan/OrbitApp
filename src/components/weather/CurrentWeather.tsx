@@ -14,7 +14,13 @@ const CurrentWeather: FunctionComponent<WeatherProps> = ({
 }) => {
     return (
         <Column style={styles.colStyle}>
-            <WeatherIcon large code={`${currentWeather.weather[0].icon}`} />
+            <View style={styles.iconContainer}>
+                <WeatherIcon
+                    large
+                    code={`${currentWeather.weather[0].icon}`}
+                    isCurrent
+                />
+            </View>
             <Text style={{ ...styles.textCenter, ...styles.today }}>Today</Text>
             <Row>
                 <Text style={{ ...styles.textCenter, ...styles.temp }}>
@@ -57,6 +63,9 @@ const styles: any = StyleSheet.create({
     today: {
         fontSize: 28,
         fontWeight: "bold",
+    },
+    iconContainer: {
+        padding: 12,
     },
 })
 

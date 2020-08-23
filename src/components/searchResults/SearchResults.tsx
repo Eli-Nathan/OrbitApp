@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react"
 import { connect } from "react-redux"
-import { ScrollView, StyleSheet, ViewStyle } from "react-native"
+import { ScrollView, StyleSheet, ViewStyle, TextStyle } from "react-native"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 
 import { setNightTheme } from "../../reducers/theme/actions"
@@ -62,7 +62,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
     const getHighlightedText = (text: string, highlight: string) => {
         const parts = text.split(new RegExp(`(${highlight})`, "gi"))
         return (
-            <Text>
+            <Text style={{ color: "#fff" }}>
                 {parts.map((part, i) =>
                     part.toLowerCase() === highlight.toLowerCase() ? (
                         <Text
@@ -85,13 +85,11 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
         results.slice(0, 5).map((result: any) => (
             <Row style={styles.result} key={`${result.woeid}`}>
                 <TouchableWithoutFeedback
-                    style={{ width: "100%", height: "100%", flexGrow: 1 }}
+                    style={{ width: "100%" }}
                     onPress={() => loadNewLocation(result)}
-                    hitSlop={{ top: 100, bottom: 100, left: 100, right: 100 }}
+                    hitSlop={{ top: 20, bottom: 20, left: 100, right: 100 }}
                 >
-                    <Text
-                        style={{ width: "100%", height: "100%", flexGrow: 1 }}
-                    >
+                    <Text style={{ width: "100%" }}>
                         {getHighlightedText(result.title, query)}
                     </Text>
                 </TouchableWithoutFeedback>
@@ -113,12 +111,13 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
 interface Styles {
     results: ViewStyle
     result: ViewStyle
+    highlightText: TextStyle
 }
 
 const styles: any = StyleSheet.create<Styles>({
     results: {
         width: "100%",
-        height: 100,
+        height: 900,
         paddingBottom: 20,
         paddingLeft: 14,
         paddingRight: 14,
@@ -128,6 +127,9 @@ const styles: any = StyleSheet.create<Styles>({
         width: "100%",
         paddingTop: 20,
         paddingBottom: 20,
+    },
+    highlightText: {
+        textDecorationLine: "underline",
     },
 })
 

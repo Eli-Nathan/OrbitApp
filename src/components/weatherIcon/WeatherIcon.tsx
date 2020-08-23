@@ -6,7 +6,8 @@ interface IconProps {
     code: string
     large?: boolean
     small?: boolean
-    size?: boolean
+    size?: number
+    isCurrent?: boolean
 }
 
 const renderIcon: FunctionComponent<IconProps> = ({
@@ -14,6 +15,7 @@ const renderIcon: FunctionComponent<IconProps> = ({
     large,
     small,
     size,
+    isCurrent,
 }) => {
     const defaultSize = 60
     const largeSize = 200
@@ -24,12 +26,15 @@ const renderIcon: FunctionComponent<IconProps> = ({
         ? smallSize
         : size || defaultSize
     const mappedIcon = icons.iconMap[code]
+    console.log(mappedIcon)
+    console.log(isCurrent)
     const WeatherIcon = icons[mappedIcon]
     return (
         <WeatherIcon
             width={dimensions}
             height={dimensions}
-            viewBox={`0 0 190 190`}
+            viewBox={`0 0 ${size || 170} ${size || 170}`}
+            isCurrent={isCurrent}
         />
     )
 }

@@ -3,14 +3,14 @@ require_relative '../node_modules/react-native/scripts/react_native_pods'
 
 platform :ios, '11.0'
 
-target 'WeatherApp' do
+target 'OrbitApp' do
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways.podspec"
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse.podspec"
   config = use_native_modules!
   use_react_native!(:path => config["reactNativePath"])
 
-  target 'WeatherAppTests' do
+  target 'OrbitAppTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -22,14 +22,5 @@ target 'WeatherApp' do
   use_flipper!
   post_install do |installer|
     flipper_post_install(installer)
-  end
-end
-
-target 'WeatherApp-tvOS' do
-  # Pods for WeatherApp-tvOS
-
-  target 'WeatherApp-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
   end
 end

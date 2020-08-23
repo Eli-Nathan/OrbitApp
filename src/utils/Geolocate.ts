@@ -1,4 +1,9 @@
-import { PERMISSIONS, checkMultiple, RESULTS } from "react-native-permissions"
+import {
+    PERMISSIONS,
+    checkMultiple,
+    RESULTS,
+    requestMultiple,
+} from "react-native-permissions"
 import Geolocation from "@react-native-community/geolocation"
 
 import apiFetch from "../hooks/apiFetch/apiFetch"
@@ -54,7 +59,10 @@ const geoLocate = ({
                     .catch((error) => setError(error))
             }
         },
-        (error) => setError(error)
+        (error) => {
+            console.log("error2", error)
+            setError(error)
+        }
     )
 
 export const getPosition = ({
@@ -68,12 +76,12 @@ export const getPosition = ({
 }: GeoLocateProps) => {
     checkMultiple([
         PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-        PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+        PERMISSIONS.IOS.LOCATION_ALWAYS,
     ])
         .then((statuses) => {
             const permission =
                 Platform.OS === "ios"
-                    ? statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE]
+                    ? statuses[PERMISSIONS.IOS.LOCATION_ALWAYS]
                     : statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]
             switch (permission) {
                 case RESULTS.UNAVAILABLE:
@@ -82,7 +90,21 @@ export const getPosition = ({
                     )
                     break
                 case RESULTS.DENIED:
-                    navigation.navigate("Search")
+                    requestMultiple([
+                        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+                        PERMISSIONS.IOS.LOCATION_ALWAYS,
+                    ])
+                        .then((requestStatus) =>
+                            geoLocate({
+                                setNightTheme,
+                                setLatLon,
+                                setLocationData,
+                                setCurrentWeather,
+                                setFetching,
+                                setError,
+                            })
+                        )
+                        .catch(() => navigation.navigate("Search"))
                     break
                 case RESULTS.GRANTED:
                     geoLocate({
@@ -101,5 +123,8 @@ export const getPosition = ({
                     break
             }
         })
-        .catch((error) => setError(error))
+        .catch((error) => {
+            console.log("error1", error)
+            setError(error)
+        })
 }

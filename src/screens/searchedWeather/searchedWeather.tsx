@@ -67,7 +67,7 @@ const SearchedWeatherScreen: FunctionComponent<SearchedWeatherScreenProps> = ({
                                 textAlign: "center",
                             }}
                         >
-                            Allow WeatherApp to use location services
+                            Allow Orbit to use location services
                         </Text>
                     </TouchableHighlight>
                 )}

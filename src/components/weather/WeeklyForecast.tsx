@@ -34,49 +34,45 @@ const DayBlock: FunctionComponent<DayBlockProps> = ({
             </Column>
             <Column style={styles.tempCol}>
                 <Row style={styles.tempRow}>
-                    <Row>
-                        <Text
-                            style={{
-                                ...styles.textCenter,
-                                ...styles.temp,
-                                ...styles.tempMax,
-                            }}
-                        >
-                            {tempMax}
-                        </Text>
-                        <Text
-                            style={{
-                                ...styles.textCenter,
-                                ...styles.tempSmall,
-                            }}
-                        >
-                            °c
-                        </Text>
-                    </Row>
+                    <Text
+                        style={{
+                            ...styles.textCenter,
+                            ...styles.temp,
+                            ...styles.tempMax,
+                        }}
+                    >
+                        {tempMax}
+                    </Text>
+                    <Text
+                        style={{
+                            ...styles.textCenter,
+                            ...styles.tempSmall,
+                        }}
+                    >
+                        °c
+                    </Text>
                 </Row>
             </Column>
             <Column style={styles.tempCol}>
                 <Row style={styles.tempRow}>
-                    <Row>
-                        <Text
-                            style={{
-                                ...styles.textCenter,
-                                ...styles.temp,
-                                ...styles.tempMin,
-                            }}
-                        >
-                            {tempMin}
-                        </Text>
-                        <Text
-                            style={{
-                                ...styles.textCenter,
-                                ...styles.tempSmall,
-                                ...styles.tempMin,
-                            }}
-                        >
-                            °c
-                        </Text>
-                    </Row>
+                    <Text
+                        style={{
+                            ...styles.textCenter,
+                            ...styles.temp,
+                            ...styles.tempMin,
+                        }}
+                    >
+                        {tempMin}
+                    </Text>
+                    <Text
+                        style={{
+                            ...styles.textCenter,
+                            ...styles.tempSmall,
+                            ...styles.tempMin,
+                        }}
+                    >
+                        °c
+                    </Text>
                 </Row>
             </Column>
         </Row>
@@ -112,14 +108,16 @@ const styles: any = StyleSheet.create({
         paddingBottom: 12,
     },
     iconCol: {
-        width: "15%",
+        width: "25%",
         alignItems: "center",
         justifyContent: "center",
     },
     dayCol: {
-        width: "40%",
+        width: "35%",
     },
     tempCol: {
+        alignItems: "center",
+        justifyContent: "center",
         width: "20%",
     },
     dayText: {
@@ -148,8 +146,7 @@ const styles: any = StyleSheet.create({
         fontWeight: "normal",
     },
     tempRow: {
-        marginTop: 0,
-        justifyContent: "flex-end",
+        // marginTop: -20,
     },
 })
 
