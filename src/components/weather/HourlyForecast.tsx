@@ -29,9 +29,7 @@ const HourBlock: FunctionComponent<HourBlockProps> = ({
     sunrise,
     sunset,
 }) => {
-    console.log(`Rise: ${sunrise}, Set: ${sunset}, Time: ${time}`)
     const dayBlock = calcIsDayRoughly(sunrise, sunset, time)
-    console.log("dayBlock", dayBlock)
     return (
         <Column
             style={{
@@ -79,7 +77,6 @@ const HourlyForecast: FunctionComponent<HourlyForecastProps> = ({
     sunset,
 }) => {
     const renderHours = () => {
-        console.log("renderHours")
         return hourlyWeather
             .slice(1, 12)
             .map((hour: any) => (

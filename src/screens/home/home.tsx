@@ -1,5 +1,5 @@
 import React, { useEffect, FunctionComponent, useState } from "react"
-import { ScrollView, View } from "react-native"
+import { View } from "react-native"
 import "react-native-gesture-handler"
 import { connect } from "react-redux"
 import {
@@ -52,13 +52,15 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     nightTheme,
     userLocation,
 }) => {
+    const [loading, setLoading] = useState(true)
     const [persistedWeather, setHasWeather] = useState<any>(false)
     const { getItem } = useAsyncStorage("@current_weather")
 
     const readWeatherFromStorage = async () => {
         const item = await getItem()
-        console.log("storageItem", item)
+        console.log(item)
         setHasWeather(item)
+        setLoading(false)
     }
     const getPositionProps = {
         setNightTheme,
@@ -71,21 +73,23 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     }
 
     useEffect(() => {
-        console.log("persistedWeather home before", persistedWeather)
         readWeatherFromStorage()
-        console.log("persistedWeather home after", persistedWeather)
-        if (!persistedWeather) {
+    }, [])
+
+    useEffect(() => {
+        readWeatherFromStorage()
+        if (!loading && !persistedWeather) {
+            console.log("getPosition")
             getPosition(getPositionProps)
         } else {
-            const persitedCurrentWeather = persistedWeather.current
             console.log("persistedWeather", persistedWeather)
         }
-    }, [])
+    }, [loading])
 
     return (
         <Screen navigation={navigation} hasSearch nightTheme={nightTheme}>
             <View style={{ flexGrow: 1, height: "100%" }}>
-                {currentWeather && location ? (
+                {!loading && currentWeather && location ? (
                     <Location
                         currentWeather={
                             persistedWeather?.current || currentWeather
