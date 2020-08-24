@@ -1,17 +1,19 @@
 import React from "react"
-import { StyleSheet, View } from "react-native"
+import { StyleSheet } from "react-native"
+import { DateTime } from "luxon"
 
-import { Column, Text } from "../../primitives"
+import { Text } from "../../primitives"
 import LocationHeader from "../locationHeader/locationHeader"
 import useLiveClock from "../../hooks/useLiveClock"
 
 interface LocaleProps {
     locationName: string
     nightTheme: boolean
+    timezone: string
 }
 
 const Locale = (props: LocaleProps) => {
-    const liveDate = useLiveClock()
+    const liveDate: DateTime = useLiveClock(props.timezone)
     return (
         <>
             <LocationHeader location={props.locationName} />
@@ -19,9 +21,7 @@ const Locale = (props: LocaleProps) => {
                 style={{ ...styles.textCenter, ...styles.datetime }}
                 marginBottom={12}
             >
-                {`${liveDate.format("HH:mm")} - ${liveDate.format(
-                    "dddd"
-                )} ${liveDate.format("Do MMMM")}`}
+                {`${liveDate.toLocaleString(DateTime.DATETIME_FULL)} - `}
             </Text>
         </>
     )

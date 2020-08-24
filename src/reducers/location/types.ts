@@ -10,7 +10,7 @@ export interface LocationData {
     lon?: number
     woeid?: number | null
     locationName?: string | null
-    nearby?: any
+    timezone?: string
     currentWeather?: any
     hourlyWeather?: any
     dailyWeather?: any

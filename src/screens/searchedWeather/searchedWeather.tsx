@@ -30,6 +30,7 @@ interface SearchedWeatherScreenProps {
     location: LocationState
     nightTheme: boolean
     searchedLocation: any
+    timezone: string
 }
 
 const SearchedWeatherScreen: FunctionComponent<SearchedWeatherScreenProps> = ({
@@ -40,7 +41,9 @@ const SearchedWeatherScreen: FunctionComponent<SearchedWeatherScreenProps> = ({
     location,
     nightTheme,
     searchedLocation,
+    timezone,
 }) => {
+    console.log("searched zone", timezone)
     const [loading, setLoading] = useState(true)
     useEffect(() => setLoading(false))
     return (
@@ -53,6 +56,7 @@ const SearchedWeatherScreen: FunctionComponent<SearchedWeatherScreenProps> = ({
                             hourlyWeather={hourlyWeather}
                             locationName={searchedLocation?.locationName}
                             nightTheme={nightTheme}
+                            timezone={timezone}
                         />
                         {dailyWeather && (
                             <BottomSheet
@@ -94,6 +98,7 @@ const mapStateToProps = (state: RootState) => {
         searchedLocation,
         fetching: fetching,
         nightTheme: state.theme?.nightTheme || false,
+        timezone: searchedLocation?.timezone || "Europe/London",
     }
 }
 

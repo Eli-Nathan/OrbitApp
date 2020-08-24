@@ -18,6 +18,7 @@ import { getPosition } from "../../utils/Geolocate"
 import { OrbitIcon } from "../../assets/icons"
 import { Column } from "../../primitives"
 import { useAsyncStorage } from "@react-native-community/async-storage"
+import { calcIsDay } from "../../utils/dates"
 
 interface HomeScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -34,6 +35,7 @@ interface HomeScreenProps {
     location: LocationState
     nightTheme: boolean
     userLocation: any
+    timezone: string
 }
 
 const HomeScreen: FunctionComponent<HomeScreenProps> = ({
@@ -51,6 +53,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     location,
     nightTheme,
     userLocation,
+    timezone,
 }) => {
     const [loading, setLoading] = useState(true)
     const [persistedWeather, setPersistedWeather] = useState<any>(false)
@@ -89,6 +92,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                 hourlyWeather,
                 dailyWeather,
                 lastUpdated,
+                timezone,
             } = JSON.parse(persistedWeather)
             const timeSincePersist = Date.now() - lastUpdated
             const twoMinutes = 120000
@@ -96,12 +100,21 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                 getPosition(getPositionProps)
             } else {
                 setLatLon(lat, lon)
-                setLocationData(woeid, title)
+                setLocationData(woeid, title, timezone)
                 setCurrentWeather({
                     current: currentWeather,
                     hourly: hourlyWeather,
                     daily: dailyWeather,
                 })
+                currentWeather && console.log("sunrise", currentWeather.sunrise)
+                currentWeather &&
+                    setNightTheme(
+                        !calcIsDay(
+                            currentWeather.sunrise,
+                            currentWeather.sunset,
+                            new Date()
+                        )
+                    )
             }
         }
     }, [loading])
@@ -128,6 +141,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                             hourlyWeather={hourlyWeather}
                             locationName={userLocation.locationName}
                             nightTheme={nightTheme}
+                            timezone={timezone}
                         />
                         {dailyWeather && (
                             <BottomSheet
@@ -161,7 +175,12 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
 const mapStateToProps = (state: RootState) => {
     const location = state.location
     const { fetching, userLocation } = location
-    const { currentWeather, hourlyWeather, dailyWeather } = userLocation
+    const {
+        currentWeather,
+        hourlyWeather,
+        dailyWeather,
+        timezone,
+    } = userLocation
     return {
         sunRise:
             currentWeather?.sunrise ||
@@ -176,6 +195,7 @@ const mapStateToProps = (state: RootState) => {
         userLocation,
         fetching: fetching,
         nightTheme: state.theme?.nightTheme || false,
+        timezone,
     }
 }
 
@@ -186,9 +206,14 @@ const mapDispatchToProps = (dispatch: any) => ({
     setLatLon: (lat: number, lon: number) => {
         dispatch(ACTIONS.setLatLon(ACTIONS.SET_USER_LAT_LON, lat, lon))
     },
-    setLocationData: (woeid: number, name: string) => {
+    setLocationData: (woeid: number, name: string, timezone: string) => {
         dispatch(
-            ACTIONS.setLocationData(ACTIONS.SET_USER_LOCATION_DATA, woeid, name)
+            ACTIONS.setLocationData(
+                ACTIONS.SET_USER_LOCATION_DATA,
+                woeid,
+                name,
+                timezone
+            )
         )
     },
     setCurrentWeather: (weather: any) => {

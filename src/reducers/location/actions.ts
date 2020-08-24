@@ -26,12 +26,14 @@ export const setLatLon = (type: string, lat: number, lon: number) => ({
 export const setLocationData = (
     type: string,
     woeid: number,
-    locationName: string
+    locationName: string,
+    timezone: string
 ) => ({
     type: type,
     payload: {
         woeid,
         locationName,
+        timezone,
     },
 })
 

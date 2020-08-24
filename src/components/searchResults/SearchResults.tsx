@@ -40,7 +40,6 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
         const lat = result.latt_long.split(",")[0]
         const lon = result.latt_long.split(",")[1]
         setLatLon(lat, lon)
-        setLocationData(result.woeid, result.title)
         apiFetch(API.WEATHER, {
             lat,
             lon,
@@ -48,6 +47,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
         })
             .then((data) => {
                 setCurrentWeather(data)
+                setLocationData(result.woeid, result.title, data.timezone)
                 setNightTheme(
                     !calcIsDay(
                         data.current.sunrise,
@@ -141,12 +141,13 @@ const mapDispatchToProps = (dispatch: any) => ({
     setLatLon: (lat: number, lon: number) => {
         dispatch(ACTIONS.setLatLon(ACTIONS.SET_SEARCHED_LAT_LON, lat, lon))
     },
-    setLocationData: (woeid: number, name: string) => {
+    setLocationData: (woeid: number, name: string, timezone: string) => {
         dispatch(
             ACTIONS.setLocationData(
                 ACTIONS.SET_SEARCHED_LOCATION_DATA,
                 woeid,
-                name
+                name,
+                timezone
             )
         )
     },

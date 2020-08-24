@@ -49,13 +49,17 @@ const geoLocate = ({
                     lattlong: `${lat},${lon}`,
                 })
                     .then(async (data) => {
-                        setLocationData(data[0].woeid, data[0].title)
                         await apiFetch(API.WEATHER, {
                             lat,
                             lon,
                             units: "metric",
                         }).then((weatherData) => {
                             setCurrentWeather(weatherData)
+                            setLocationData(
+                                data[0].woeid,
+                                data[0].title,
+                                weatherData.timezone
+                            )
                             setStorageValue(
                                 "@current_weather",
                                 JSON.stringify({
@@ -67,6 +71,7 @@ const geoLocate = ({
                                     dailyWeather: weatherData.daily,
                                     hourlyWeather: weatherData.hourly,
                                     lastUpdated: Date.now(),
+                                    timezone: weatherData.timezone,
                                 })
                             )
                             setNightTheme(

@@ -11,6 +11,7 @@ interface LocationProps {
     hourlyWeather: any
     locationName: string
     nightTheme: boolean
+    timezone: string
 }
 
 const Location = (props: LocationProps) => {
@@ -21,6 +22,7 @@ const Location = (props: LocationProps) => {
                     <Locale
                         nightTheme={props.nightTheme}
                         locationName={props.locationName}
+                        timezone={props.timezone}
                     />
                     <Weather
                         currentWeather={props.currentWeather}
