@@ -12,7 +12,7 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		29E46E5C24F426AC00015381 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E46E5B24F426AC00015381 /* File.swift */; };
+		29E46E5F24F4428100015381 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E46E5E24F4428100015381 /* File.swift */; };
 		29FBB82124E2E21400B0B43A /* LaunchScreen.storyboard in Sources */ = {isa = PBXBuildFile; fileRef = 29FBB82024E2E21400B0B43A /* LaunchScreen.storyboard */; };
 		6EA7F6F5F2717D3C913F8152 /* libPods-OrbitApp-OrbitAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D261FF691302BF1C996802C /* libPods-OrbitApp-OrbitAppTests.a */; };
 		CEFE45745DF34574BAD16CCE /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CD1D6C9B3174438091F1EE91 /* Poppins-Medium.ttf */; };
@@ -58,7 +58,8 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = OrbitApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = OrbitApp/main.m; sourceTree = "<group>"; };
 		21368C6477EC87BD54A2B150 /* libPods-OrbitApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OrbitApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		29E46E5B24F426AC00015381 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		29E46E5D24F4428100015381 /* OrbitApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OrbitApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		29E46E5E24F4428100015381 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		29FBB82024E2E21400B0B43A /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = OrbitApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2A722393676574D5F8120213 /* Pods-OrbitApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OrbitApp.release.xcconfig"; path = "Target Support Files/Pods-OrbitApp/Pods-OrbitApp.release.xcconfig"; sourceTree = "<group>"; };
 		2DEA9B9662D8F849D4713CD7 /* Pods-OrbitApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OrbitApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-OrbitApp-tvOSTests/Pods-OrbitApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -161,7 +162,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				29E46E5B24F426AC00015381 /* File.swift */,
+				29E46E5E24F4428100015381 /* File.swift */,
 				29FBB82024E2E21400B0B43A /* LaunchScreen.storyboard */,
 				13B07FAE1A68108700A75B9A /* OrbitApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -170,6 +171,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				98FB15CA2C256CB4151740DB /* Pods */,
 				5BB05BFC1EB246A5A5783218 /* Resources */,
+				29E46E5D24F4428100015381 /* OrbitApp-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -443,7 +445,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				29FBB82124E2E21400B0B43A /* LaunchScreen.storyboard in Sources */,
-				29E46E5C24F426AC00015381 /* File.swift in Sources */,
+				29E46E5F24F4428100015381 /* File.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -535,6 +537,7 @@
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = OrbitApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "OrbitApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -558,6 +561,7 @@
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = OrbitApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "OrbitApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
