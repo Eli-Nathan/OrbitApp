@@ -124,6 +124,7 @@ const styles: any = StyleSheet.create<Styles>({
         color: "#fff",
     },
     result: {
+        color: "#fff",
         width: "100%",
         paddingTop: 20,
         paddingBottom: 20,

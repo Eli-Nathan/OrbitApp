@@ -66,6 +66,7 @@ const geoLocate = ({
                                     currentWeather: weatherData.current,
                                     dailyWeather: weatherData.daily,
                                     hourlyWeather: weatherData.hourly,
+                                    lastUpdated: Date.now(),
                                 })
                             )
                             setNightTheme(
@@ -95,7 +96,7 @@ export const getPosition = ({
     setError,
     navigation,
 }: GeoLocateProps) => {
-    checkMultiple([
+    return checkMultiple([
         PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
         PERMISSIONS.IOS.LOCATION_ALWAYS,
     ])
@@ -115,7 +116,7 @@ export const getPosition = ({
                         PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
                         PERMISSIONS.IOS.LOCATION_ALWAYS,
                     ])
-                        .then((requestStatus) =>
+                        .then(() =>
                             geoLocate({
                                 setNightTheme,
                                 setLatLon,

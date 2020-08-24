@@ -1,7 +1,7 @@
 import * as React from "react"
 import Svg, { Path } from "react-native-svg"
 
-function ClearSkyNight(props) {
+function SvgClearSkyNight(props) {
     return (
         <Svg width={160} height={160} {...props}>
             <Path
@@ -13,4 +13,4 @@ function ClearSkyNight(props) {
     )
 }
 
-export default ClearSkyNight
+export default SvgClearSkyNight

@@ -10,12 +10,14 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 
 import { Row, Text } from "../primitives"
 import Theme from "../theme"
-import { IconSearch } from "../assets/icons"
+import { IconSearch, OrbitIcon } from "../assets/icons"
 
 interface ScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
     hasSearch?: boolean
     nightTheme: boolean
+    isHome?: boolean
+    reload?: () => void
 }
 
 const Screen: FunctionComponent<ScreenProps> = ({
@@ -23,6 +25,7 @@ const Screen: FunctionComponent<ScreenProps> = ({
     children,
     navigation,
     nightTheme,
+    reload,
 }) => {
     const styles = StyleSheet.create({
         safeAreaView: {
@@ -67,9 +70,22 @@ const Screen: FunctionComponent<ScreenProps> = ({
                                 }}
                             >
                                 <IconSearch
-                                    width={40}
-                                    height={40}
+                                    width={30}
+                                    height={30}
                                     viewBox={`0 0 160 160`}
+                                />
+                            </TouchableWithoutFeedback>
+                            <TouchableWithoutFeedback
+                                onPress={() =>
+                                    reload
+                                        ? reload()
+                                        : navigation.navigate("Home")
+                                }
+                            >
+                                <OrbitIcon
+                                    width={30}
+                                    height={30}
+                                    viewBox={`0 0 78 78`}
                                 />
                             </TouchableWithoutFeedback>
                         </Row>

@@ -4,11 +4,9 @@ import React, {
     useCallback,
     FunctionComponent,
 } from "react"
-import { ScrollView, Text, TouchableHighlight, View } from "react-native"
+import { View } from "react-native"
 import "react-native-gesture-handler"
 import { connect } from "react-redux"
-
-import { PERMISSIONS, request } from "react-native-permissions"
 import {
     NavigationParams,
     NavigationScreenProp,
@@ -17,11 +15,11 @@ import {
 
 import Screen from ".."
 import Location from "../../components/location/Location"
-import * as ACTIONS from "../../reducers/location/actions"
 import { RootState } from "../../reducers"
 import { LocationState } from "../../reducers/location/types"
 import BottomSheet from "../../components/bottomSheet"
-import { getPosition } from "../../utils/Geolocate"
+import { Column } from "../../primitives"
+import { OrbitIcon } from "../../assets/icons"
 
 interface SearchedWeatherScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -43,41 +41,44 @@ const SearchedWeatherScreen: FunctionComponent<SearchedWeatherScreenProps> = ({
     nightTheme,
     searchedLocation,
 }) => {
+    const [loading, setLoading] = useState(true)
+    useEffect(() => setLoading(false))
     return (
         <Screen navigation={navigation} hasSearch nightTheme={nightTheme}>
             <View style={{ flexGrow: 1, height: "100%" }}>
-                {currentWeather && location ? (
-                    <Location
-                        currentWeather={currentWeather}
-                        hourlyWeather={hourlyWeather}
-                        locationName={searchedLocation?.locationName}
-                        nightTheme={nightTheme}
-                    />
+                {!loading && currentWeather && location ? (
+                    <>
+                        <Location
+                            currentWeather={currentWeather}
+                            hourlyWeather={hourlyWeather}
+                            locationName={searchedLocation?.locationName}
+                            nightTheme={nightTheme}
+                        />
+                        {dailyWeather && (
+                            <BottomSheet
+                                dailyWeather={dailyWeather}
+                                snapPoints={[600, 260]}
+                            />
+                        )}
+                    </>
                 ) : (
-                    <TouchableHighlight
-                        onPress={() =>
-                            request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then(
-                                () => getPosition
-                            )
-                        }
+                    <Column
+                        style={{
+                            flexGrow: 1,
+                            marginTop: -270,
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
                     >
-                        <Text
-                            style={{
-                                color: "#fff",
-                                textAlign: "center",
-                            }}
-                        >
-                            Allow Orbit to use location services
-                        </Text>
-                    </TouchableHighlight>
+                        <OrbitIcon
+                            width={78}
+                            height={78}
+                            viewBox={"0 0 78 78"}
+                            animated
+                        />
+                    </Column>
                 )}
             </View>
-            {dailyWeather && (
-                <BottomSheet
-                    dailyWeather={dailyWeather}
-                    snapPoints={[600, 220]}
-                />
-            )}
         </Screen>
     )
 }
@@ -86,12 +87,6 @@ const mapStateToProps = (state: RootState) => {
     const location = state.location
     const { fetching, searchedLocation } = location
     return {
-        sunRise:
-            searchedLocation?.currentWeather?.sunrise ||
-            new Date(new Date().setHours(5, 0, 0, 0)).toISOString(),
-        sunSet:
-            searchedLocation?.currentWeather?.sunset ||
-            new Date(new Date().setHours(20, 0, 0, 0)).toISOString(),
         currentWeather: searchedLocation?.currentWeather,
         hourlyWeather: searchedLocation?.hourlyWeather,
         dailyWeather: searchedLocation?.dailyWeather,

@@ -1,5 +1,5 @@
-import React, { useEffect, FunctionComponent, useState } from "react"
-import { View } from "react-native"
+import React, { useEffect, FunctionComponent, useState, useRef } from "react"
+import { View, Animated, Easing } from "react-native"
 import "react-native-gesture-handler"
 import { connect } from "react-redux"
 import {
@@ -15,7 +15,7 @@ import { RootState } from "../../reducers"
 import { LocationState } from "../../reducers/location/types"
 import BottomSheet from "../../components/bottomSheet"
 import { getPosition } from "../../utils/Geolocate"
-import { ClearSkyDay } from "../../assets/icons"
+import { OrbitIcon } from "../../assets/icons"
 import { Column } from "../../primitives"
 import { useAsyncStorage } from "@react-native-community/async-storage"
 
@@ -53,14 +53,13 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     userLocation,
 }) => {
     const [loading, setLoading] = useState(true)
-    const [persistedWeather, setHasWeather] = useState<any>(false)
+    const [persistedWeather, setPersistedWeather] = useState<any>(false)
     const { getItem } = useAsyncStorage("@current_weather")
 
     const readWeatherFromStorage = async () => {
         const item = await getItem()
-        console.log(item)
-        setHasWeather(item)
-        setLoading(false)
+        setPersistedWeather(item)
+        setTimeout(() => setLoading(false), 1000)
     }
     const getPositionProps = {
         setNightTheme,
@@ -79,46 +78,82 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     useEffect(() => {
         readWeatherFromStorage()
         if (!loading && !persistedWeather) {
-            console.log("getPosition")
             getPosition(getPositionProps)
         } else {
-            console.log("persistedWeather", persistedWeather)
+            const {
+                woeid,
+                title,
+                lat,
+                lon,
+                currentWeather,
+                hourlyWeather,
+                dailyWeather,
+                lastUpdated,
+            } = JSON.parse(persistedWeather)
+            const timeSincePersist = Date.now() - lastUpdated
+            const twoMinutes = 120000
+            if (timeSincePersist > twoMinutes) {
+                getPosition(getPositionProps)
+            } else {
+                setLatLon(lat, lon)
+                setLocationData(woeid, title)
+                setCurrentWeather({
+                    current: currentWeather,
+                    hourly: hourlyWeather,
+                    daily: dailyWeather,
+                })
+            }
         }
     }, [loading])
 
+    const reload = () => {
+        setLoading(true)
+        getPosition(getPositionProps).then(() =>
+            setTimeout(() => setLoading(false), 2000)
+        )
+    }
+
     return (
-        <Screen navigation={navigation} hasSearch nightTheme={nightTheme}>
+        <Screen
+            navigation={navigation}
+            hasSearch
+            reload={reload}
+            nightTheme={nightTheme}
+        >
             <View style={{ flexGrow: 1, height: "100%" }}>
                 {!loading && currentWeather && location ? (
-                    <Location
-                        currentWeather={
-                            persistedWeather?.current || currentWeather
-                        }
-                        hourlyWeather={
-                            persistedWeather?.hourly || hourlyWeather
-                        }
-                        locationName={userLocation.locationName}
-                        nightTheme={nightTheme}
-                    />
+                    <>
+                        <Location
+                            currentWeather={currentWeather}
+                            hourlyWeather={hourlyWeather}
+                            locationName={userLocation.locationName}
+                            nightTheme={nightTheme}
+                        />
+                        {dailyWeather && (
+                            <BottomSheet
+                                dailyWeather={dailyWeather}
+                                snapPoints={[600, 260]}
+                            />
+                        )}
+                    </>
                 ) : (
                     <Column
                         style={{
                             flexGrow: 1,
+                            marginTop: -270,
                             alignItems: "center",
-                            marginTop: -300,
                             justifyContent: "center",
                         }}
                     >
-                        <ClearSkyDay width={100} height={100} />
+                        <OrbitIcon
+                            width={78}
+                            height={78}
+                            viewBox={"0 0 78 78"}
+                            animated
+                        />
                     </Column>
                 )}
             </View>
-            {dailyWeather && (
-                <BottomSheet
-                    dailyWeather={dailyWeather}
-                    snapPoints={[600, 220]}
-                />
-            )}
         </Screen>
     )
 }

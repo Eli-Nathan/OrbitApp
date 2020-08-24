@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react"
 
 import * as icons from "../../assets/icons"
+import { iconMap } from "../../assets/icons/mapper"
 
 interface IconProps {
     code: string
@@ -25,7 +26,7 @@ const renderIcon: FunctionComponent<IconProps> = ({
         : small
         ? smallSize
         : size || defaultSize
-    const mappedIcon = icons.iconMap[code]
+    const mappedIcon = iconMap[code]
     const WeatherIcon = icons[mappedIcon]
     return (
         <WeatherIcon
