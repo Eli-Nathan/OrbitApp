@@ -7,6 +7,7 @@ export const SET_USER_LOCATION_DATA = "user/SET_LOCATION_DATA"
 export const SET_SEARCHED_LOCATION_DATA = "searched/SET_LOCATION_DATA"
 export const SET_USER_CURRENT_WEATHER = "user/SET_CURRENT_WEATHER"
 export const SET_SEARCHED_CURRENT_WEATHER = "searched/SET_CURRENT_WEATHER"
+export const SET_RECENT_SEARCHES = "searched/SET_RECENT_SEARCHES"
 
 export const setNightTheme = (nightTheme: boolean) => ({
     type: SET_NIGHT_THEME,
@@ -42,6 +43,20 @@ export const setCurrentWeather = (type: string, weather: any) => ({
     payload: {
         weather,
         fetching: false,
+    },
+})
+
+export const setRecentSearches = (
+    type: string,
+    title: string,
+    lat: number,
+    lon: number
+) => ({
+    type: type,
+    payload: {
+        title,
+        lat,
+        lon,
     },
 })
 

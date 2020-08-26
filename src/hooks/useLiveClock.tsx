@@ -8,7 +8,6 @@ const zonedDate = (date: Date, timezone: string) => {
 }
 
 const useLiveClock = (timezone: string) => {
-    console.log(timezone)
     const date = new Date()
     const zoned = zonedDate(date, timezone)
     const [liveDate, setLiveDate] = useState(zoned)

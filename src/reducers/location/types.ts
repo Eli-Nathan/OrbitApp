@@ -3,6 +3,7 @@ export interface LocationState {
     error?: string | null
     userLocation: LocationData
     searchedLocation?: LocationData
+    recentSearches: any
 }
 
 export interface LocationData {

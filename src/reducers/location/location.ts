@@ -7,6 +7,7 @@ import {
     SET_SEARCHED_LAT_LON,
     SET_SEARCHED_LOCATION_DATA,
     SET_SEARCHED_CURRENT_WEATHER,
+    SET_RECENT_SEARCHES,
 } from "./actions"
 import { LocationState, LocationStateAction } from "./types"
 
@@ -15,6 +16,7 @@ export const initialState = {
         lat: 0,
         lon: 0,
     },
+    recentSearches: [],
     fetching: true,
     error: null,
 }
@@ -93,6 +95,27 @@ export const locationReducer = (
                 },
                 fetching: false,
                 error: null,
+            }
+        case SET_RECENT_SEARCHES:
+            let recentSearches = state.recentSearches
+            const existingIndex = recentSearches.findIndex(
+                (loc: any) => loc.title === action.payload.title
+            )
+            if (existingIndex === -1 && state.recentSearches.length > 5) {
+                recentSearches = state.recentSearches.slice(1, 6)
+            } else if (existingIndex >= 0) {
+                recentSearches.splice(existingIndex, 1)
+            }
+            return {
+                ...state,
+                recentSearches: [
+                    ...recentSearches,
+                    {
+                        title: action.payload.title,
+                        lat: action.payload.lat,
+                        lon: action.payload.lon,
+                    },
+                ],
             }
         case SET_FETCHING:
             return {

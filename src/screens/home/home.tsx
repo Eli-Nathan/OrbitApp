@@ -106,7 +106,6 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                     hourly: hourlyWeather,
                     daily: dailyWeather,
                 })
-                currentWeather && console.log("sunrise", currentWeather.sunrise)
                 currentWeather &&
                     setNightTheme(
                         !calcIsDay(

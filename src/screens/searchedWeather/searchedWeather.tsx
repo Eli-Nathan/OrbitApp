@@ -43,7 +43,6 @@ const SearchedWeatherScreen: FunctionComponent<SearchedWeatherScreenProps> = ({
     searchedLocation,
     timezone,
 }) => {
-    console.log("searched zone", timezone)
     const [loading, setLoading] = useState(true)
     useEffect(() => setLoading(false))
     return (

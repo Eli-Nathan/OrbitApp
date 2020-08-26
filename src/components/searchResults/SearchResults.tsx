@@ -20,6 +20,7 @@ interface SearchResultsProps {
     setLatLon: any
     setLocationData: any
     setCurrentWeather: any
+    setRecentSearches: any
     setNightTheme: any
     setError: any
 }
@@ -33,6 +34,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
     setLatLon,
     setLocationData,
     setCurrentWeather,
+    setRecentSearches,
     setNightTheme,
     setError,
 }) => {
@@ -48,6 +50,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
             .then((data) => {
                 setCurrentWeather(data)
                 setLocationData(result.woeid, result.title, data.timezone)
+                setRecentSearches(lat, lon, result.title)
                 setNightTheme(
                     !calcIsDay(
                         data.current.sunrise,
@@ -148,6 +151,16 @@ const mapDispatchToProps = (dispatch: any) => ({
                 woeid,
                 name,
                 timezone
+            )
+        )
+    },
+    setRecentSearches: (lat: number, lon: number, title: string) => {
+        dispatch(
+            ACTIONS.setRecentSearches(
+                ACTIONS.SET_RECENT_SEARCHES,
+                title,
+                lat,
+                lon
             )
         )
     },
