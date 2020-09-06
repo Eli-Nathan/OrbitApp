@@ -32,7 +32,7 @@ const renderIcon: FunctionComponent<IconProps> = ({
         <WeatherIcon
             width={dimensions}
             height={dimensions}
-            viewBox={`0 0 ${size || 170} ${size || 170}`}
+            viewBox={`0 0 ${170} ${170}`}
             isCurrent={isCurrent}
         />
     )

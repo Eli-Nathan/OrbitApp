@@ -1,14 +1,16 @@
-import React, { FunctionComponent } from "react"
+import React, { FunctionComponent, useEffect, useState } from "react"
 import { connect } from "react-redux"
-import { ScrollView, StyleSheet, ViewStyle, TextStyle } from "react-native"
+import { StyleSheet, ViewStyle, TextStyle, View } from "react-native"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
+import AsyncStorage, {
+    useAsyncStorage,
+} from "@react-native-community/async-storage"
 
 import { setNightTheme } from "../../reducers/theme/actions"
 import * as ACTIONS from "../../reducers/location/actions"
 import apiFetch from "../../hooks/apiFetch"
 import { API } from "../../constants/api"
 import { calcIsDay } from "../../utils/dates"
-import { RootState } from "../../reducers"
 import { Text, Row } from "../../primitives"
 
 interface SearchResultsProps {
@@ -23,6 +25,7 @@ interface SearchResultsProps {
     setRecentSearches: any
     setNightTheme: any
     setError: any
+    recent: any
 }
 
 const SearchResults: FunctionComponent<SearchResultsProps> = ({
@@ -37,7 +40,33 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
     setRecentSearches,
     setNightTheme,
     setError,
+    recent,
 }) => {
+    const [persistedRecentSearches, setPersistedRecentSearches] = useState<any>(
+        false
+    )
+    const { getItem } = useAsyncStorage("@recent_searches")
+
+    const setStorageValue = async (key: string, value: string) => {
+        try {
+            console.log("set", value)
+            await AsyncStorage.setItem(key, value)
+        } catch (e) {
+            // save error
+        }
+    }
+    const readRecentFromStorage = async () => {
+        const item: any = await getItem()
+        console.log("Read", item)
+        setPersistedRecentSearches(JSON.parse(item))
+    }
+    useEffect(() => {
+        recent.length > 0 &&
+            setStorageValue("@recent_searches", JSON.stringify(recent))
+        readRecentFromStorage()
+        console.log("state", persistedRecentSearches[0])
+    }, [recent])
+
     const loadNewLocation = (result: any) => {
         const lat = result.latt_long.split(",")[0]
         const lon = result.latt_long.split(",")[1]
@@ -49,7 +78,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
         })
             .then((data) => {
                 setCurrentWeather(data)
-                setLocationData(result.woeid, result.title, data.timezone)
+                setLocationData(result.title, data.timezone)
                 setRecentSearches(lat, lon, result.title)
                 setNightTheme(
                     !calcIsDay(
@@ -84,9 +113,10 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
             </Text>
         )
     }
-    const renderResults = () =>
-        results.slice(0, 5).map((result: any) => (
-            <Row style={styles.result} key={`${result.woeid}`}>
+
+    const renderResults = (res: any) =>
+        res.slice(0, 10).map((result: any) => (
+            <Row style={styles.result} key={`${result.latt_long}`}>
                 <TouchableWithoutFeedback
                     style={{ width: "100%" }}
                     onPress={() => loadNewLocation(result)}
@@ -99,15 +129,17 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
             </Row>
         ))
     return (
-        <ScrollView style={styles.results} keyboardShouldPersistTaps="handled">
+        <View style={styles.results}>
             {fetching ? (
                 <Text style={styles.result}>Searching...</Text>
-            ) : results.length > 0 ? (
-                renderResults()
+            ) : results.length > 0 && query.length > 0 ? (
+                renderResults(results)
+            ) : persistedRecentSearches.length > 0 ? (
+                renderResults(recent)
             ) : (
                 <Text style={styles.result}>{placeholder}</Text>
             )}
-        </ScrollView>
+        </View>
     )
 }
 
@@ -120,7 +152,7 @@ interface Styles {
 const styles: any = StyleSheet.create<Styles>({
     results: {
         width: "100%",
-        height: 900,
+        flexGrow: 1,
         paddingBottom: 20,
         paddingLeft: 14,
         paddingRight: 14,
@@ -144,11 +176,10 @@ const mapDispatchToProps = (dispatch: any) => ({
     setLatLon: (lat: number, lon: number) => {
         dispatch(ACTIONS.setLatLon(ACTIONS.SET_SEARCHED_LAT_LON, lat, lon))
     },
-    setLocationData: (woeid: number, name: string, timezone: string) => {
+    setLocationData: (name: string, timezone: string) => {
         dispatch(
             ACTIONS.setLocationData(
                 ACTIONS.SET_SEARCHED_LOCATION_DATA,
-                woeid,
                 name,
                 timezone
             )
@@ -176,4 +207,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     setError: (error: string) => dispatch(ACTIONS.setError(error)),
 })
 
-export default connect(null, mapDispatchToProps)(SearchResults)
+const mapStateToProps = (state: any) => ({
+    recent: state.location.recentSearches,
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchResults)

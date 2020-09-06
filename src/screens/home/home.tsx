@@ -1,5 +1,5 @@
 import React, { useEffect, FunctionComponent, useState, useRef } from "react"
-import { View, Animated, Easing } from "react-native"
+import { View } from "react-native"
 import "react-native-gesture-handler"
 import { connect } from "react-redux"
 import {
@@ -84,7 +84,6 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
             getPosition(getPositionProps)
         } else {
             const {
-                woeid,
                 title,
                 lat,
                 lon,
@@ -100,7 +99,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                 getPosition(getPositionProps)
             } else {
                 setLatLon(lat, lon)
-                setLocationData(woeid, title, timezone)
+                setLocationData(title, timezone)
                 setCurrentWeather({
                     current: currentWeather,
                     hourly: hourlyWeather,
@@ -135,18 +134,20 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
             <View style={{ flexGrow: 1, height: "100%" }}>
                 {!loading && currentWeather && location ? (
                     <>
-                        <Location
-                            currentWeather={currentWeather}
-                            hourlyWeather={hourlyWeather}
-                            locationName={userLocation.locationName}
-                            nightTheme={nightTheme}
-                            timezone={timezone}
-                        />
-                        {dailyWeather && (
-                            <BottomSheet
-                                dailyWeather={dailyWeather}
-                                snapPoints={[600, 260]}
+                        <View style={{ flexGrow: 10 }}>
+                            <Location
+                                currentWeather={currentWeather}
+                                hourlyWeather={hourlyWeather}
+                                locationName={userLocation.locationName}
+                                nightTheme={nightTheme}
+                                timezone={timezone}
                             />
+                        </View>
+
+                        {dailyWeather && (
+                            <View style={{ flexGrow: 4 }}>
+                                <BottomSheet dailyWeather={dailyWeather} />
+                            </View>
                         )}
                     </>
                 ) : (
@@ -205,11 +206,10 @@ const mapDispatchToProps = (dispatch: any) => ({
     setLatLon: (lat: number, lon: number) => {
         dispatch(ACTIONS.setLatLon(ACTIONS.SET_USER_LAT_LON, lat, lon))
     },
-    setLocationData: (woeid: number, name: string, timezone: string) => {
+    setLocationData: (name: string, timezone: string) => {
         dispatch(
             ACTIONS.setLocationData(
                 ACTIONS.SET_USER_LOCATION_DATA,
-                woeid,
                 name,
                 timezone
             )

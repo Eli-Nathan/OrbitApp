@@ -6,11 +6,11 @@ import {
 } from "react-native-permissions"
 import Geolocation from "@react-native-community/geolocation"
 import AsyncStorage from "@react-native-community/async-storage"
+import { Platform } from "react-native"
 
 import apiFetch from "../hooks/apiFetch/apiFetch"
 import { API } from "../constants/api"
 import { calcIsDay } from "./dates"
-import { Platform } from "react-native"
 
 interface GeoLocateProps {
     setNightTheme: any
@@ -55,15 +55,10 @@ const geoLocate = ({
                             units: "metric",
                         }).then((weatherData) => {
                             setCurrentWeather(weatherData)
-                            setLocationData(
-                                data[0].woeid,
-                                data[0].title,
-                                weatherData.timezone
-                            )
+                            setLocationData(data[0].title, weatherData.timezone)
                             setStorageValue(
                                 "@current_weather",
                                 JSON.stringify({
-                                    woeid: data[0].woeid,
                                     title: data[0].title,
                                     lat,
                                     lon,

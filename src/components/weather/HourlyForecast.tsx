@@ -1,11 +1,13 @@
 import React, { FunctionComponent } from "react"
-import { StyleSheet, ScrollView, View } from "react-native"
+import { StyleSheet, ScrollView, View, Dimensions } from "react-native"
 
 import WeatherIcon from "../weatherIcon"
 import { parseTemp } from "../../utils/strings"
 import { Column, Row, Text } from "../../primitives"
 import Theme from "../../theme"
 import { calcIsDayRoughly } from "../../utils/dates"
+
+const windowHeight = Dimensions.get("window").height
 
 interface HourlyForecastProps {
     hourlyWeather: any
@@ -105,11 +107,11 @@ const HourlyForecast: FunctionComponent<HourlyForecastProps> = ({
 
 const styles: any = StyleSheet.create({
     scrollStyle: {
-        width: "100%",
+        flexGrow: 1,
         height: 100,
-        flex: 1,
         paddingLeft: 18,
         paddingRight: 18,
+        marginTop: 12,
     },
     card: {
         backgroundColor: "#fff",
@@ -118,13 +120,13 @@ const styles: any = StyleSheet.create({
             width: 0,
             height: 5,
         },
-        height: 140,
         shadowOpacity: 0.16,
         shadowRadius: 6.68,
         elevation: 11,
+        height: (windowHeight / 100) * 18,
         margin: 6,
         padding: 12,
-        width: 140,
+        width: (windowHeight / 100) * 18,
         borderRadius: 12,
         textAlign: "center",
         alignItems: "center",

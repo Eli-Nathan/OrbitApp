@@ -42,7 +42,6 @@ export const locationReducer = (
                 ...state,
                 userLocation: {
                     ...state.userLocation,
-                    woeid: action.payload?.woeid,
                     locationName: action.payload?.locationName,
                     timezone: action.payload?.timezone,
                 },
@@ -77,7 +76,6 @@ export const locationReducer = (
                 ...state,
                 searchedLocation: {
                     ...state.searchedLocation,
-                    woeid: action.payload?.woeid,
                     locationName: action.payload?.locationName,
                     timezone: action.payload?.timezone,
                 },
@@ -102,7 +100,7 @@ export const locationReducer = (
                 (loc: any) => loc.title === action.payload.title
             )
             if (existingIndex === -1 && state.recentSearches.length > 5) {
-                recentSearches = state.recentSearches.slice(1, 6)
+                recentSearches = state.recentSearches.slice(1, 5)
             } else if (existingIndex >= 0) {
                 recentSearches.splice(existingIndex, 1)
             }

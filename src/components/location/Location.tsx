@@ -42,7 +42,6 @@ interface Styles {
 const styles: any = StyleSheet.create<Styles>({
     colStyle: {
         flexGrow: 1,
-        display: "flex",
         alignItems: "center",
     },
     locationDisplay: {

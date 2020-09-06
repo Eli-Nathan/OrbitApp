@@ -1,5 +1,5 @@
 import React from "react"
-import { StyleSheet } from "react-native"
+import { StyleSheet, Dimensions, View } from "react-native"
 import { DateTime } from "luxon"
 
 import { Text } from "../../primitives"
@@ -20,16 +20,27 @@ const Locale = (props: LocaleProps) => {
     const dayOfWeek = liveDate.weekdayShort
     const month = liveDate.monthShort
     const date = `${dayOfWeek} ${dayOfMonth} ${month}`
+    const windowHeight = Dimensions.get("window").height
+    const twentyPercent = (windowHeight / 100) * 12
     return (
-        <>
+        <View
+            style={{
+                flex: 1.3,
+                justifyContent: "space-around",
+            }}
+        >
             <LocationHeader location={props.locationName} />
             <Text
-                style={{ ...styles.textCenter, ...styles.datetime }}
+                style={{
+                    ...styles.textCenter,
+                    ...styles.datetime,
+                    justifyContent: "flex-start",
+                }}
                 marginBottom={12}
             >
                 {`${time} - ${date}`}
             </Text>
-        </>
+        </View>
     )
 }
 

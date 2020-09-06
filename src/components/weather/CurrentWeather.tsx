@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react"
-import { StyleSheet, View } from "react-native"
+import { StyleSheet, View, Dimensions } from "react-native"
 
 import WeatherIcon from "../weatherIcon"
 import { parseTemp } from "../../utils/strings"
@@ -9,6 +9,9 @@ interface WeatherProps {
     currentWeather: any
 }
 
+const windowHeight = Dimensions.get("window").height
+const iconPercentSize = windowHeight > 800 ? 18 : 12
+
 const CurrentWeather: FunctionComponent<WeatherProps> = ({
     currentWeather,
 }) => {
@@ -16,23 +19,27 @@ const CurrentWeather: FunctionComponent<WeatherProps> = ({
         <Column style={styles.colStyle}>
             <View style={styles.iconContainer}>
                 <WeatherIcon
-                    large
+                    size={(windowHeight / 100) * 18}
                     code={`${currentWeather.weather[0].icon}`}
                     isCurrent
                 />
             </View>
-            <Text style={{ ...styles.textCenter, ...styles.today }}>Today</Text>
-            <Row>
-                <Text style={{ ...styles.textCenter, ...styles.temp }}>
-                    {parseTemp(currentWeather?.temp)}
+            <View style={{ justifyContent: "space-around" }}>
+                <Text style={{ ...styles.textCenter, ...styles.today }}>
+                    Today
                 </Text>
-                <Text style={{ ...styles.textCenter, ...styles.tempSmall }}>
-                    °c
+                <Row>
+                    <Text style={{ ...styles.textCenter, ...styles.temp }}>
+                        {parseTemp(currentWeather?.temp)}
+                    </Text>
+                    <Text style={{ ...styles.textCenter, ...styles.tempSmall }}>
+                        °c
+                    </Text>
+                </Row>
+                <Text style={{ ...styles.textCenter, ...styles.weatherString }}>
+                    {currentWeather?.weather[0].main}
                 </Text>
-            </Row>
-            <Text style={{ ...styles.textCenter, ...styles.weatherString }}>
-                {currentWeather?.weather[0].main}
-            </Text>
+            </View>
         </Column>
     )
 }
@@ -61,11 +68,9 @@ const styles: any = StyleSheet.create({
         marginBottom: 12,
     },
     today: {
+        marginTop: 12,
         fontSize: 28,
         fontWeight: "bold",
-    },
-    iconContainer: {
-        padding: 12,
     },
 })
 

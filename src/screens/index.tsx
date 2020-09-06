@@ -56,7 +56,7 @@ const Screen: FunctionComponent<ScreenProps> = ({
                         ? Theme.Colours.DarkBlue_light
                         : Theme.Colours.LightBlue_light,
                 ]}
-                style={{ flexGrow: 1 }}
+                style={{ flexGrow: 1, height: "105%" }}
             >
                 <StatusBar barStyle="light-content" />
                 <View>

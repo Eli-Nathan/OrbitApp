@@ -1,5 +1,5 @@
 import React, { createRef, FunctionComponent } from "react"
-import { View } from "react-native"
+import { View, Dimensions } from "react-native"
 import BottomSheet from "reanimated-bottom-sheet"
 
 import { Row } from "../../primitives"
@@ -14,6 +14,9 @@ const BottomDrawer: FunctionComponent<BottomDrawerProps> = ({
     snapPoints,
 }) => {
     let bottomSheetRef = createRef<BottomSheet>()
+    const windowHeight = Dimensions.get("window").height
+    const thirtyPercentHeight = (windowHeight / 100) * 30
+    const seventyFivePercent = (windowHeight / 100) * 75
     const renderContent = () => {
         return (
             <View
@@ -21,7 +24,7 @@ const BottomDrawer: FunctionComponent<BottomDrawerProps> = ({
                     backgroundColor: "#fff",
                     paddingLeft: 30,
                     paddingRight: 30,
-                    paddingBottom: 50,
+                    paddingBottom: 60,
                 }}
             >
                 <WeeklyForecast dailyWeather={dailyWeather} />
@@ -37,6 +40,7 @@ const BottomDrawer: FunctionComponent<BottomDrawerProps> = ({
                     borderTopLeftRadius: 16,
                     justifyContent: "center",
                     padding: 12,
+                    marginBottom: -2,
                 }}
             >
                 <View
@@ -51,14 +55,16 @@ const BottomDrawer: FunctionComponent<BottomDrawerProps> = ({
         )
     }
     return (
-        <BottomSheet
-            ref={bottomSheetRef}
-            initialSnap={1}
-            snapPoints={snapPoints || [580, 180]}
-            renderContent={renderContent}
-            renderHeader={renderHeader}
-            enabledBottomInitialAnimation={true}
-        />
+        <View style={{ flex: 2 }}>
+            <BottomSheet
+                ref={bottomSheetRef}
+                initialSnap={1}
+                snapPoints={[650, 240]}
+                renderContent={renderContent}
+                renderHeader={renderHeader}
+                enabledBottomInitialAnimation={true}
+            />
+        </View>
     )
 }
 

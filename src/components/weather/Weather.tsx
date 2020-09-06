@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react"
+import { View } from "react-native"
 
 import CurrentWeather from "./CurrentWeather"
 import HourlyForecast from "./HourlyForecast"
-import WeeklyForecast from "./WeeklyForecast"
 
 interface WeatherProps {
     currentWeather: any
@@ -14,14 +14,14 @@ const Weather: FunctionComponent<WeatherProps> = ({
     hourlyWeather,
 }) => {
     return (
-        <>
+        <View style={{ flex: 8 }}>
             <CurrentWeather currentWeather={currentWeather} />
             <HourlyForecast
                 hourlyWeather={hourlyWeather}
                 sunrise={currentWeather?.sunrise || 0}
                 sunset={currentWeather?.sunset || 0}
             />
-        </>
+        </View>
     )
 }
 

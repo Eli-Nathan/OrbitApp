@@ -1,9 +1,4 @@
-import React, {
-    useEffect,
-    useState,
-    useCallback,
-    FunctionComponent,
-} from "react"
+import React, { useEffect, useState, FunctionComponent } from "react"
 import { View } from "react-native"
 import "react-native-gesture-handler"
 import { connect } from "react-redux"
@@ -58,10 +53,7 @@ const SearchedWeatherScreen: FunctionComponent<SearchedWeatherScreenProps> = ({
                             timezone={timezone}
                         />
                         {dailyWeather && (
-                            <BottomSheet
-                                dailyWeather={dailyWeather}
-                                snapPoints={[600, 260]}
-                            />
+                            <BottomSheet dailyWeather={dailyWeather} />
                         )}
                     </>
                 ) : (

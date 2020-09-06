@@ -9,7 +9,6 @@ export interface LocationState {
 export interface LocationData {
     lat?: number
     lon?: number
-    woeid?: number | null
     locationName?: string | null
     timezone?: string
     currentWeather?: any
