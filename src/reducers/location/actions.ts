@@ -27,12 +27,14 @@ export const setLatLon = (type: string, lat: number, lon: number) => ({
 export const setLocationData = (
     type: string,
     locationName: string,
-    timezone: string
+    timezone: string,
+    timezoneOffset: number = 0
 ) => ({
     type: type,
     payload: {
         locationName,
         timezone,
+        timezoneOffset,
     },
 })
 

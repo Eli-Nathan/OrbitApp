@@ -82,7 +82,6 @@ const geoLocate = ({
             }
         },
         (error) => {
-            console.log("error2", error)
             setError(error)
         }
     )
@@ -107,9 +106,6 @@ export const getPosition = ({
                     : statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]
             switch (permission) {
                 case RESULTS.UNAVAILABLE:
-                    console.log(
-                        "This feature is not available (on this device / in this context)"
-                    )
                     break
                 case RESULTS.DENIED:
                     requestMultiple([
@@ -139,14 +135,10 @@ export const getPosition = ({
                     })
                     break
                 case RESULTS.BLOCKED:
-                    console.log(
-                        "The permission is denied and not requestable anymore"
-                    )
                     break
             }
         })
         .catch((error) => {
-            console.log("error1", error)
             setError(error)
         })
 }

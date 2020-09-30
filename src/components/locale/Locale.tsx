@@ -20,8 +20,6 @@ const Locale = (props: LocaleProps) => {
     const dayOfWeek = liveDate.weekdayShort
     const month = liveDate.monthShort
     const date = `${dayOfWeek} ${dayOfMonth} ${month}`
-    const windowHeight = Dimensions.get("window").height
-    const twentyPercent = (windowHeight / 100) * 12
     return (
         <View
             style={{
@@ -36,7 +34,6 @@ const Locale = (props: LocaleProps) => {
                     ...styles.datetime,
                     justifyContent: "flex-start",
                 }}
-                marginBottom={12}
             >
                 {`${time} - ${date}`}
             </Text>
@@ -50,7 +47,7 @@ const styles: any = StyleSheet.create({
         color: "#fff",
     },
     datetime: {
-        fontSize: 18,
+        fontSize: 16,
     },
 })
 

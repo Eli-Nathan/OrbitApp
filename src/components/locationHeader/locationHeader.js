@@ -6,7 +6,11 @@ import { Text } from "../../primitives"
 import Theme from "../../theme"
 
 const LocationHeader = (props) => {
-    return <Text style={styles.headerViewTextStyle}>{props.location}</Text>
+    return (
+        <Text bold style={styles.headerViewTextStyle}>
+            {props.location}
+        </Text>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -14,7 +18,6 @@ const styles = StyleSheet.create({
         fontSize: 28,
         color: Theme.Colours.White,
         textAlign: "center",
-        fontWeight: "bold",
     },
 })
 

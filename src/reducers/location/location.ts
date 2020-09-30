@@ -15,6 +15,7 @@ export const initialState = {
     userLocation: {
         lat: 0,
         lon: 0,
+        timezoneOffset: 0,
     },
     recentSearches: [],
     fetching: true,
@@ -78,6 +79,7 @@ export const locationReducer = (
                     ...state.searchedLocation,
                     locationName: action.payload?.locationName,
                     timezone: action.payload?.timezone,
+                    timezoneOffset: action.payload?.timezoneOffset,
                 },
                 fetching: false,
                 error: null,

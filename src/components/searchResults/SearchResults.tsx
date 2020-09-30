@@ -49,7 +49,6 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
 
     const setStorageValue = async (key: string, value: string) => {
         try {
-            console.log("set", value)
             await AsyncStorage.setItem(key, value)
         } catch (e) {
             // save error
@@ -57,14 +56,12 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
     }
     const readRecentFromStorage = async () => {
         const item: any = await getItem()
-        console.log("Read", item)
         setPersistedRecentSearches(JSON.parse(item))
     }
     useEffect(() => {
-        recent.length > 0 &&
+        recent?.length > 0 &&
             setStorageValue("@recent_searches", JSON.stringify(recent))
         readRecentFromStorage()
-        console.log("state", persistedRecentSearches[0])
     }, [recent])
 
     const loadNewLocation = (result: any) => {
@@ -78,7 +75,11 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
         })
             .then((data) => {
                 setCurrentWeather(data)
-                setLocationData(result.title, data.timezone)
+                setLocationData(
+                    result.title,
+                    data.timezone,
+                    data.timezone_offset
+                )
                 setRecentSearches(lat, lon, result.title)
                 setNightTheme(
                     !calcIsDay(
@@ -91,10 +92,14 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
             })
             .catch((error) => setError(error))
     }
-    const getHighlightedText = (text: string, highlight: string) => {
+    const getHighlightedText = (
+        text: string,
+        highlight: string,
+        color: string = "#fff"
+    ) => {
         const parts = text.split(new RegExp(`(${highlight})`, "gi"))
         return (
-            <Text style={{ color: "#fff" }}>
+            <Text style={{ color }}>
                 {parts.map((part, i) =>
                     part.toLowerCase() === highlight.toLowerCase() ? (
                         <Text
@@ -128,14 +133,36 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
                 </TouchableWithoutFeedback>
             </Row>
         ))
+
+    const renderRecent = (recent: any) =>
+        recent.map((rec: any) => (
+            <View style={styles.recent} key={`${rec.lat}-${rec.lon}`}>
+                <TouchableWithoutFeedback
+                    onPress={() => loadNewLocation(rec)}
+                    hitSlop={{ top: 5, bottom: 5, left: 5, right: 5 }}
+                >
+                    <Text style={{ color: "#000" }}>
+                        {getHighlightedText(rec.title, query, "#000")}
+                    </Text>
+                </TouchableWithoutFeedback>
+            </View>
+        ))
     return (
         <View style={styles.results}>
             {fetching ? (
                 <Text style={styles.result}>Searching...</Text>
-            ) : results.length > 0 && query.length > 0 ? (
+            ) : results?.length && query?.length ? (
                 renderResults(results)
-            ) : persistedRecentSearches.length > 0 ? (
-                renderResults(recent)
+            ) : persistedRecentSearches?.length ? (
+                <View
+                    style={{
+                        flexDirection: "row",
+                        marginTop: 12,
+                        flexWrap: "wrap",
+                    }}
+                >
+                    {renderRecent(recent)}
+                </View>
             ) : (
                 <Text style={styles.result}>{placeholder}</Text>
             )}
@@ -144,12 +171,23 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
 }
 
 interface Styles {
+    recent: ViewStyle
     results: ViewStyle
     result: ViewStyle
     highlightText: TextStyle
 }
 
 const styles: any = StyleSheet.create<Styles>({
+    recent: {
+        backgroundColor: "#fafafa",
+        paddingTop: 6,
+        paddingBottom: 6,
+        paddingLeft: 21,
+        paddingRight: 21,
+        borderRadius: 100,
+        marginRight: 12,
+        marginBottom: 12,
+    },
     results: {
         width: "100%",
         flexGrow: 1,
@@ -176,12 +214,17 @@ const mapDispatchToProps = (dispatch: any) => ({
     setLatLon: (lat: number, lon: number) => {
         dispatch(ACTIONS.setLatLon(ACTIONS.SET_SEARCHED_LAT_LON, lat, lon))
     },
-    setLocationData: (name: string, timezone: string) => {
+    setLocationData: (
+        name: string,
+        timezone: string,
+        timezoneOffset: number
+    ) => {
         dispatch(
             ACTIONS.setLocationData(
                 ACTIONS.SET_SEARCHED_LOCATION_DATA,
                 name,
-                timezone
+                timezone,
+                timezoneOffset
             )
         )
     },

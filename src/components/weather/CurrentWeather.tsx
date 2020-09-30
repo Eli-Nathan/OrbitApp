@@ -25,11 +25,11 @@ const CurrentWeather: FunctionComponent<WeatherProps> = ({
                 />
             </View>
             <View style={{ justifyContent: "space-around" }}>
-                <Text style={{ ...styles.textCenter, ...styles.today }}>
+                <Text bold style={{ ...styles.textCenter, ...styles.today }}>
                     Today
                 </Text>
                 <Row>
-                    <Text style={{ ...styles.textCenter, ...styles.temp }}>
+                    <Text bold style={{ ...styles.textCenter, ...styles.temp }}>
                         {parseTemp(currentWeather?.temp)}
                     </Text>
                     <Text style={{ ...styles.textCenter, ...styles.tempSmall }}>
@@ -53,11 +53,10 @@ const styles: any = StyleSheet.create({
         color: "#fff",
     },
     temp: {
+        lineHeight: 78,
         fontSize: 68,
-        fontWeight: "bold",
     },
     tempSmall: {
-        fontWeight: "normal",
         fontSize: 40,
         alignItems: "flex-start",
         justifyContent: "flex-start",
@@ -69,8 +68,8 @@ const styles: any = StyleSheet.create({
     },
     today: {
         marginTop: 12,
+        lineHeight: 50,
         fontSize: 28,
-        fontWeight: "bold",
     },
 })
 

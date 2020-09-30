@@ -129,10 +129,8 @@ const styles: any = StyleSheet.create({
     },
     temp: {
         fontSize: 20,
-        fontWeight: "bold",
     },
     tempSmall: {
-        fontWeight: "normal",
         fontSize: 10,
         alignItems: "flex-start",
         justifyContent: "flex-start",
@@ -143,7 +141,6 @@ const styles: any = StyleSheet.create({
     },
     today: {
         fontSize: 16,
-        fontWeight: "normal",
     },
     tempRow: {
         // marginTop: -20,

@@ -11,6 +11,7 @@ export interface LocationData {
     lon?: number
     locationName?: string | null
     timezone?: string
+    timezoneOffset: number
     currentWeather?: any
     hourlyWeather?: any
     dailyWeather?: any

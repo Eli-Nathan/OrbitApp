@@ -13,6 +13,7 @@ interface HourlyForecastProps {
     hourlyWeather: any
     sunrise: number
     sunset: number
+    timezoneOffset: number
 }
 
 interface HourBlockProps {
@@ -32,6 +33,7 @@ const HourBlock: FunctionComponent<HourBlockProps> = ({
     sunset,
 }) => {
     const dayBlock = calcIsDayRoughly(sunrise, sunset, time)
+    console.log(time, new Date(time * 1000).getHours())
     return (
         <Column
             style={{
@@ -51,6 +53,7 @@ const HourBlock: FunctionComponent<HourBlockProps> = ({
             <WeatherIcon code={`${weather.icon}`} />
             <Row>
                 <Text
+                    bold
                     style={{
                         ...styles.textCenter,
                         ...styles.temp,
@@ -77,15 +80,17 @@ const HourlyForecast: FunctionComponent<HourlyForecastProps> = ({
     hourlyWeather,
     sunrise,
     sunset,
+    timezoneOffset,
 }) => {
     const renderHours = () => {
+        console.log(hourlyWeather[1].dt)
         return hourlyWeather
             .slice(1, 12)
             .map((hour: any) => (
                 <HourBlock
                     key={hour.dt}
                     weather={hour.weather[0]}
-                    time={hour.dt}
+                    time={hour.dt - timezoneOffset}
                     temp={hour.temp}
                     sunrise={sunrise}
                     sunset={sunset}
@@ -143,10 +148,8 @@ const styles: any = StyleSheet.create({
     },
     temp: {
         fontSize: 20,
-        fontWeight: "bold",
     },
     tempSmall: {
-        fontWeight: "normal",
         fontSize: 10,
         alignItems: "flex-start",
         justifyContent: "flex-start",
@@ -154,7 +157,6 @@ const styles: any = StyleSheet.create({
     },
     today: {
         fontSize: 16,
-        fontWeight: "normal",
     },
     dayText: {
         color: "#7388A5",

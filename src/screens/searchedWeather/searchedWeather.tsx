@@ -26,6 +26,7 @@ interface SearchedWeatherScreenProps {
     nightTheme: boolean
     searchedLocation: any
     timezone: string
+    timezoneOffset: number
 }
 
 const SearchedWeatherScreen: FunctionComponent<SearchedWeatherScreenProps> = ({
@@ -37,6 +38,7 @@ const SearchedWeatherScreen: FunctionComponent<SearchedWeatherScreenProps> = ({
     nightTheme,
     searchedLocation,
     timezone,
+    timezoneOffset,
 }) => {
     const [loading, setLoading] = useState(true)
     useEffect(() => setLoading(false))
@@ -45,15 +47,21 @@ const SearchedWeatherScreen: FunctionComponent<SearchedWeatherScreenProps> = ({
             <View style={{ flexGrow: 1, height: "100%" }}>
                 {!loading && currentWeather && location ? (
                     <>
-                        <Location
-                            currentWeather={currentWeather}
-                            hourlyWeather={hourlyWeather}
-                            locationName={searchedLocation?.locationName}
-                            nightTheme={nightTheme}
-                            timezone={timezone}
-                        />
+                        <View style={{ flexGrow: 10 }}>
+                            <Location
+                                currentWeather={currentWeather}
+                                hourlyWeather={hourlyWeather}
+                                locationName={searchedLocation?.locationName}
+                                nightTheme={nightTheme}
+                                timezone={timezone}
+                                timezoneOffset={timezoneOffset}
+                            />
+                        </View>
+
                         {dailyWeather && (
-                            <BottomSheet dailyWeather={dailyWeather} />
+                            <View style={{ flexGrow: 4 }}>
+                                <BottomSheet dailyWeather={dailyWeather} />
+                            </View>
                         )}
                     </>
                 ) : (
@@ -90,6 +98,7 @@ const mapStateToProps = (state: RootState) => {
         fetching: fetching,
         nightTheme: state.theme?.nightTheme || false,
         timezone: searchedLocation?.timezone || "Europe/London",
+        timezoneOffset: searchedLocation?.timezoneOffset || 0,
     }
 }
 

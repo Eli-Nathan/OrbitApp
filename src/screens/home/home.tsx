@@ -36,6 +36,7 @@ interface HomeScreenProps {
     nightTheme: boolean
     userLocation: any
     timezone: string
+    timezoneOffset: number
 }
 
 const HomeScreen: FunctionComponent<HomeScreenProps> = ({
@@ -54,6 +55,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
     nightTheme,
     userLocation,
     timezone,
+    timezoneOffset,
 }) => {
     const [loading, setLoading] = useState(true)
     const [persistedWeather, setPersistedWeather] = useState<any>(false)
@@ -141,6 +143,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({
                                 locationName={userLocation.locationName}
                                 nightTheme={nightTheme}
                                 timezone={timezone}
+                                timezoneOffset={timezoneOffset}
                             />
                         </View>
 
@@ -196,6 +199,7 @@ const mapStateToProps = (state: RootState) => {
         fetching: fetching,
         nightTheme: state.theme?.nightTheme || false,
         timezone,
+        timezoneOffset: 0,
     }
 }
 

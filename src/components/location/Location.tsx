@@ -12,6 +12,7 @@ interface LocationProps {
     locationName: string
     nightTheme: boolean
     timezone: string
+    timezoneOffset: number
 }
 
 const Location = (props: LocationProps) => {
@@ -27,6 +28,7 @@ const Location = (props: LocationProps) => {
                     <Weather
                         currentWeather={props.currentWeather}
                         hourlyWeather={props.hourlyWeather}
+                        timezoneOffset={props.timezoneOffset}
                     />
                 </Column>
             )}
