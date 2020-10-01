@@ -1,5 +1,7 @@
 # OrbitApp
-Weather app I built to learn React Native
+Weather app I built to learn React Native. [Watch the UI being used here](https://youtu.be/jaKkUfdSTsA)
+
+Designed by [Ross McCluskey](http://www.rossmccluskey.com/)
 
 ## Setup
 
