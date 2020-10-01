@@ -50,7 +50,9 @@ const HourBlock: FunctionComponent<HourBlockProps> = ({
             >
                 {timeHrs}:00
             </Text>
-            <WeatherIcon code={`${weather.icon}`} />
+            <Row style={{ height: 70 }} marginTop={-24}>
+                <WeatherIcon code={`${weather.icon}`} />
+            </Row>
             <Row>
                 <Text
                     bold
