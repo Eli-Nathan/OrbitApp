@@ -32,8 +32,8 @@ const HourBlock: FunctionComponent<HourBlockProps> = ({
     sunrise,
     sunset,
 }) => {
+    const timeHrs = new Date(time * 1000).getHours()
     const dayBlock = calcIsDayRoughly(sunrise, sunset, time)
-    console.log(time, new Date(time * 1000).getHours())
     return (
         <Column
             style={{
@@ -48,7 +48,7 @@ const HourBlock: FunctionComponent<HourBlockProps> = ({
                     ...styles[dayBlock ? "dayText" : "nightText"],
                 }}
             >
-                {new Date(time * 1000).getHours()}:00
+                {timeHrs}:00
             </Text>
             <WeatherIcon code={`${weather.icon}`} />
             <Row>
@@ -83,17 +83,16 @@ const HourlyForecast: FunctionComponent<HourlyForecastProps> = ({
     timezoneOffset,
 }) => {
     const renderHours = () => {
-        console.log(hourlyWeather[1].dt)
         return hourlyWeather
             .slice(1, 12)
             .map((hour: any) => (
                 <HourBlock
                     key={hour.dt}
                     weather={hour.weather[0]}
-                    time={hour.dt - timezoneOffset}
+                    time={hour.dt + timezoneOffset}
                     temp={hour.temp}
-                    sunrise={sunrise}
-                    sunset={sunset}
+                    sunrise={sunrise + timezoneOffset}
+                    sunset={sunset + timezoneOffset}
                 />
             ))
     }
