@@ -135,18 +135,21 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
         ))
 
     const renderRecent = (recent: any) =>
-        recent.map((rec: any) => (
-            <View style={styles.recent} key={`${rec.lat}-${rec.lon}`}>
-                <TouchableWithoutFeedback
-                    onPress={() => loadNewLocation(rec)}
-                    hitSlop={{ top: 5, bottom: 5, left: 5, right: 5 }}
-                >
-                    <Text style={{ color: "#000" }}>
-                        {getHighlightedText(rec.title, query, "#000")}
-                    </Text>
-                </TouchableWithoutFeedback>
-            </View>
-        ))
+        recent.map((rec: any) => {
+            rec.latt_long = `${rec.lat},${rec.lon}`
+            return (
+                <View style={styles.recent} key={`${rec.lat}-${rec.lon}`}>
+                    <TouchableWithoutFeedback
+                        onPress={() => loadNewLocation(rec)}
+                        hitSlop={{ top: 5, bottom: 5, left: 5, right: 5 }}
+                    >
+                        <Text style={{ color: "#000" }}>
+                            {getHighlightedText(rec.title, query, "#000")}
+                        </Text>
+                    </TouchableWithoutFeedback>
+                </View>
+            )
+        })
     return (
         <View style={styles.results}>
             {fetching ? (
