@@ -24,7 +24,7 @@
     "appcenter": "3.1.1",
     "appcenter-analytics": "3.1.1",
     "appcenter-crashes": "3.1.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "date-time-format-timezone": "^1.0.22",
     "intl": "^1.2.5",
     "jetifier": "^1.6.6",
