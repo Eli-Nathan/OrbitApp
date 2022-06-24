@@ -58,7 +58,7 @@
     "@types/react-navigation": "*",
     "babel-jest": "^24.9.0",
     "eslint": "^6.5.1",
-    "hermes-engine": "0.5.1",
+    "hermes-engine": "0.11.0",
     "jest": "^25.1.0",
     "metro-react-native-babel-preset": "^0.59.0",
     "prettier": "2.0.5",
